@@ -1,6 +1,10 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
+  "parserOptions": {
+    "project": [
+      "tsconfig.base.json"
+    ]
+  },
   "plugins": ["@nrwl/nx"],
   "overrides": [
     {
@@ -23,12 +27,26 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {}
+      "extends": [
+        "airbnb-base",
+        "airbnb-typescript/base"
+      ],
+      "rules": {
+        "class-methods-use-this": "off",
+        "import/prefer-default-export": "off",
+        "max-len": ["error", { "code": 180, "tabWidth": 4 }]
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
       "extends": ["plugin:@nrwl/nx/javascript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
+      "env": {
+        "jest": true
+      },
       "rules": {}
     }
   ]
