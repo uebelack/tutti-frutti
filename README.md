@@ -1,6 +1,6 @@
 # ToptalHackathonT2
 
-## Get started
+## Get started
 
 1. yarn install
 2. yarn start
