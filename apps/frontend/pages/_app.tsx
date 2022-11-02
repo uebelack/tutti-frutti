@@ -2,7 +2,7 @@ import { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
 
 import Head from 'next/head';
-import apolloClient from './apollo.client';
+import apolloClient from '../apollo.client';
 
 import './styles.css';
 
