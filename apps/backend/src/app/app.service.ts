@@ -6,8 +6,11 @@ import { PrismaService } from './prisma.service';
 export class AppService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getData(): Promise<{ message: string; users: User[] }> {
-    const users = await this.prisma.user.findMany();
-    return { message: 'Welcome to backend!', users };
+  async getUsers(): Promise<User[]> {
+    return this.prisma.user.findMany();
+  }
+
+  getData(): { message: string } {
+    return { message: 'Welcome to backend!' };
   }
 }
