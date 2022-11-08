@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "nx run-many --parallel --target=build --projects=frontend,backend",
+    "build:prod": "yarn;cross-env NEXT_PUBLIC_GRAPHQL_API_URL=https://toptal-hackathon-t2-backend.onrender.com/graphql yarn nx build --project=frontend; cd dist/apps/frontend; yarn; yarn next export",
     "lint:fix": "eslint . --fix --ext .ts",
     "lint": "eslint . --ext .ts",
     "start": "nx run-many --parallel --target=serve --projects=frontend,backend",
@@ -23,6 +24,7 @@
     "@nestjs/serve-static": "^3.0.0",
     "apollo-server-express": "^3.11.0",
     "core-js": "^3.6.5",
+    "cross-env": "^7.0.3",
     "graphql": "^16.6.0",
     "next": "13.0.0",
     "react": "18.2.0",
