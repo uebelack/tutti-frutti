@@ -14,8 +14,8 @@ function CustomApp({ Component, pageProps }: AppProps) {
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
       clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
       redirectUri={typeof window !== 'undefined' && window.location.origin}
-      // audience={`${window.location.origin}/api/v1`}
-      // scope="manage:quizzes"
+      audience={process.env.NEXT_PUBLIC_AUTH0_AUDIENCE}
+      scope="play:games"
       cacheLocation="localstorage"
     >
       <ApolloProvider client={apolloClient}>
