@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -7,13 +7,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id String @id @default(cuid())
-  @@map("todos")
+model User {
+  id        String   @id @default(cuid())
+  auth0     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  name      String?
+  Game      Game[]
+  role      Role     @default(USER)
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model Category {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  emoji       String
+  name        String   @unique
+  description String?
+  words       Word[]
+}
+
+model Word {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  category   Category? @relation(fields: [categoryId], references: [id])
+  text       String    @unique
+  categoryId String?
+}
+
+model Game {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  score     Int
+  userId    String
+}
+
+enum Role {
+  USER
+  ADMIN
 }
