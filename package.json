@@ -23,6 +23,7 @@
     "@nestjs/graphql": "^10.1.5",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/serve-static": "^3.0.0",
+    "@nx-tools/nx-prisma": "^3.0.8",
     "@prisma/client": "^4.6.0",
     "apollo-server-express": "^3.11.0",
     "core-js": "^3.6.5",
