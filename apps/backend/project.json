@@ -33,55 +33,6 @@
         }
       }
     },
-    "deploy": {
-      "builder": "@nx-tools/nx-prisma:generate",
-      "options": {
-        "schema": "apps/api/schema.prisma"
-      }
-    },
-    "generate": {
-      "builder": "@nx-tools/nx-prisma:generate",
-      "options": {
-        "schema": "apps/api/schema.prisma"
-      }
-    },
-    "migrate": {
-      "builder": "@nx-tools/nx-prisma:migrate",
-      "options": {
-        "schema": "apps/api/schema.prisma"
-      }
-    },
-    "pull": {
-      "builder": "@nx-tools/nx-prisma:rollback",
-      "options": {
-        "schema": "apps/api/schema.prisma"
-      }
-    },
-    "push": {
-      "builder": "@nx-tools/nx-prisma:seed",
-      "options": {
-        "schema": "apps/api/schema.prisma"
-      }
-    },
-    "reset": {
-      "builder": "@nx-tools/nx-prisma:seed",
-      "options": {
-        "schema": "apps/api/schema.prisma"
-      }
-    },
-    "seed": {
-      "builder": "@nx-tools/nx-prisma:seed",
-      "options": {
-        "script": "apps/examples/prisma/data/seed.ts",
-        "tsConfig": "apps/examples/prisma/tsconfig.tools.json"
-      }
-    },
-    "status": {
-      "builder": "@nx-tools/nx-prisma:seed",
-      "options": {
-        "schema": "apps/api/schema.prisma"
-      }
-    },
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
@@ -112,6 +63,48 @@
       "options": {
         "jestConfig": "apps/backend/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "prisma-generate": {
+      "executor": "@nx-tools/nx-prisma:generate",
+      "options": {
+        "schema": "apps/backend/prisma/schema.prisma"
+      }
+    },
+    "prisma-migrate": {
+      "executor": "@nx-tools/nx-prisma:migrate",
+      "options": {
+        "schema": "apps/backend/prisma/schema.prisma"
+      }
+    },
+    "prisma-pull": {
+      "executor": "@nx-tools/nx-prisma:pull",
+      "options": {
+        "schema": "apps/backend/prisma/schema.prisma"
+      }
+    },
+    "prisma-push": {
+      "executor": "@nx-tools/nx-prisma:push",
+      "options": {
+        "schema": "apps/backend/prisma/schema.prisma"
+      }
+    },
+    "prisma-deploy": {
+      "executor": "@nx-tools/nx-prisma:deploy",
+      "options": {
+        "schema": "apps/backend/prisma/schema.prisma"
+      }
+    },
+    "prisma-status": {
+      "executor": "@nx-tools/nx-prisma:status",
+      "options": {
+        "schema": "apps/backend/prisma/schema.prisma"
+      }
+    },
+    "prisma-studio": {
+      "executor": "@nx-tools/nx-prisma:studio",
+      "options": {
+        "schema": "apps/backend/prisma/schema.prisma"
       }
     }
   },

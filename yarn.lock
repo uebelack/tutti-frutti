@@ -2311,22 +2311,21 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
-"@nx-tools/core@^3.0.8":
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/@nx-tools/core/-/core-3.0.8.tgz#76e2b3180a7b171f340df6446b1082d0de7267d6"
-  integrity sha512-P4pgPx1sF4CYJJICGf/dSBJ5VnDvfrH1kPAZs4wvPbECFdHj0EVsVN3fdibh3kmXJz4ZAsyJqPUc4ZmsjVbLZw==
+"@nx-tools/core@4.0.0-alpha.11":
+  version "4.0.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/@nx-tools/core/-/core-4.0.0-alpha.11.tgz#def7a22dc4045ff2fe2e345a843dfd87f9383678"
+  integrity sha512-t0tyggnQoT9JUrRugiS4x+HG0Xl6j5PIF3AmW86McAR7JDEoFuFhCIN0XgtD/njx7vn4OF5TRgTgukgl7hbLVw==
   dependencies:
     "@actions/exec" "^1.1.1"
-    "@swc/helpers" "^0.4.3"
     colorette "^2.0.19"
 
-"@nx-tools/nx-prisma@^3.0.8":
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/@nx-tools/nx-prisma/-/nx-prisma-3.0.8.tgz#ac08c2afc6ce9df0bb049306ff2653b6389d447b"
-  integrity sha512-A7gZjIkeKKq/RXrx9qPbmGjWFrclfLQbevIvalEyr/xlEt9kEnAVf/z9UB3lRnBOCIXNRqB4ddzKUDNdTnSDRQ==
+"@nx-tools/nx-prisma@^4.0.0-alpha.11":
+  version "4.0.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/@nx-tools/nx-prisma/-/nx-prisma-4.0.0-alpha.11.tgz#7f0b76da57dad2c618c0673de66de521ee0513a0"
+  integrity sha512-WWrRGVcdBH3pr46B9/+4XpUUqKZgjX38T3shfZZkKcGVmzhR9/PPR+iN3bBpPhXbIWAShG1eVNWlvGtRGItvGQ==
   dependencies:
-    "@nx-tools/core" "^3.0.8"
-    "@swc/helpers" "^0.4.3"
+    "@nx-tools/core" "4.0.0-alpha.11"
+    "@swc/helpers" "^0.4.12"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
@@ -2630,7 +2629,7 @@
   dependencies:
     tslib "^2.4.0"
 
-"@swc/helpers@^0.4.3":
+"@swc/helpers@^0.4.12":
   version "0.4.12"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.4.12.tgz#203243e78cff3c87c081c97ae548ab33e2503573"
   integrity sha512-R6RmwS9Dld5lNvwKlPn62+piU+WDG1sMfsnfJioXCciyko/gZ0DQ4Mqglhq1iGU1nQ/RcGkAwfMH+elMSkJH3Q==

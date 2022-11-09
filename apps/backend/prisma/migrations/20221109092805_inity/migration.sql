@@ -1,4 +1,11 @@
 -- CreateTable
+CREATE TABLE "todos" (
+    "id" TEXT NOT NULL,
+
+    CONSTRAINT "todos_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
