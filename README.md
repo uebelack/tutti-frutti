@@ -13,5 +13,5 @@
 
 ### Prisma scripts
 
-`yarn prisma:migrate-dev` - run migrations in development mode
-`yarn prisma:studio` - open prisma studio
+`nx prisma-migrate backend dev` - runs migrations in development mode
+`nx prisma-studio backend` - opens prisma studio
