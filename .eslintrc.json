@@ -5,7 +5,7 @@
       "tsconfig.base.json"
     ]
   },
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "jest-dom", "testing-library"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
