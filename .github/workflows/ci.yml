@@ -14,6 +14,7 @@ jobs:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v3
       - run: yarn install
+      - run: yarn nx prisma-generate backend
       - run: npx nx workspace-lint
       - run: npx nx affected --target=lint
       - run: npx nx affected --target=test
