@@ -10,6 +10,8 @@ type Auth0User = {
   picture: string
 };
 
+const USER_SYNC_INTERVAL = 1000 * 60 * 60; // every hour
+
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
@@ -28,8 +30,7 @@ export class UserService {
 
   async syncUserWithAuth0(auth0: string, userToken: string) {
     const user = await this.findUserByAuth0(auth0);
-
-    if (!user) {
+    if (!user || user.updatedAt.getTime() < new Date().getTime() - USER_SYNC_INTERVAL) {
       const { data } = await firstValueFrom(
         this.httpService.get(`https://${process.env.AUTH0_DOMAIN}/userinfo`, {
           headers: {
@@ -41,8 +42,17 @@ export class UserService {
         })),
       ) as { data: Auth0User };
 
-      await this.prisma.user.create({
-        data: {
+      await this.prisma.user.upsert({
+        where: {
+          auth0,
+        },
+        update: {
+          email: data.email,
+          name: 'data.name',
+          picture: data.picture,
+        },
+        create: {
+          auth0,
           email: data.email,
           name: 'data.name',
           picture: data.picture,
