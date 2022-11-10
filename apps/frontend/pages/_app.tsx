@@ -1,9 +1,8 @@
 import { AppProps } from 'next/app';
-import { ApolloProvider } from '@apollo/client';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 import Head from 'next/head';
-import apolloClient from '../apollo.client';
+import SecureApolloProvider from '../components/SecureApolloProvider';
 import Authentication from '../components/Authentication';
 
 import './styles.css';
@@ -18,7 +17,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
       scope="play:games"
       cacheLocation="localstorage"
     >
-      <ApolloProvider client={apolloClient}>
+      <SecureApolloProvider>
         <Head>
           <title>Tutti Frutti</title>
         </Head>
@@ -27,7 +26,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </Authentication>
         </main>
-      </ApolloProvider>
+      </SecureApolloProvider>
     </Auth0Provider>
   );
 }

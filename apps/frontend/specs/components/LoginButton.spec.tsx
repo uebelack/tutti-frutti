@@ -1,11 +1,11 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Login from '../../components/Login';
+import LoginButton from '../../components/LoginButton';
 
-describe('<Login/>', () => {
+describe('<LoginButton/>', () => {
   it('should show login button', async () => {
-    render(<Login />);
+    render(<LoginButton />);
     expect(await screen.findByRole('button')).toHaveTextContent('Login');
   });
 });

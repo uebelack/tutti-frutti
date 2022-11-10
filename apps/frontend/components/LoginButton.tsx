@@ -6,7 +6,6 @@ function Login() {
   return (
     <button
       type="button"
-      className="btn btn-primary"
       onClick={loginWithRedirect}
     >
       Login
