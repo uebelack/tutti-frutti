@@ -26,5 +26,6 @@ import { GameModule } from './game/game.module';
     GameModule,
   ],
   providers: [AppService, AppResolver, PrismaService, JwtStrategy, UserService],
+  exports: [PrismaService], // needed for console module
 })
 export class AppModule {}
