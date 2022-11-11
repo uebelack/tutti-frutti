@@ -3,19 +3,20 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "build:backend": "nx build backend; nx build-console backend", 
     "build": "nx run-many --parallel --target=build --projects=frontend,backend",
-    "build:backend": "nx build-console backend", 
+    "console:dev": "ts-node --project apps/backend/tsconfig.console.json -r tsconfig-paths/register apps/backend/src/console.ts",
+    "dev:import": "yarn; yarn console:dev",
+    "dev:update": "yarn; yarn prisma:migrate-dev; yarn console:dev import",
     "lint:fix": "eslint . --fix --ext .ts",
     "lint": "eslint . --ext .ts",
+    "prisma:migrate-dev": "nx prisma-migrate backend dev",
+    "prisma:studio": "nx prisma-studio backend",
     "start": "nx run-many --parallel --target=serve --projects=frontend,backend",
     "test:backend": "nx test --project=backend --watch --coverage",
     "test:frontend": "nx test --project=frontend --watch --coverage",
     "test": "nx run-many --parallel --target=test --projects=frontend,backend --coverage",
-    "validate": "yarn lint && yarn test",
-    "prisma:migrate-dev": "nx prisma-migrate backend dev",
-    "prisma:studio": "nx prisma-studio backend",
-    "dev:update": "yarn; yarn prisma:migrate-dev; yarn console:dev import",
-    "console:dev": "ts-node --project apps/backend/tsconfig.console.json -r tsconfig-paths/register apps/backend/src/console.ts"
+    "validate": "yarn lint && yarn test"
   },
   "private": true,
   "dependencies": {
