@@ -7,11 +7,58 @@ type App {
   serverTime: DateTime!
 }
 
+type Category {
+  """Category Description"""
+  description: String
+
+  """Category Emoji"""
+  emoji: String!
+
+  """Category ID"""
+  id: String!
+
+  """Category Name"""
+  name: String!
+
+  """Words from the Category"""
+  words: [Word!]!
+}
+
+input CreateWordInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
+type Mutation {
+  createWord(createWordInput: CreateWordInput!): Word!
+  removeWord(id: Int!): Word!
+  updateWord(updateWordInput: UpdateWordInput!): Word!
+}
+
 type Query {
   app: App!
+  word(id: Int!): Word!
+  words: [Word!]!
+}
+
+input UpdateWordInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+type Word {
+  """Word Category"""
+  category: Category!
+
+  """Word ID"""
+  id: String!
+
+  """Word Text"""
+  text: String!
 }

@@ -11,6 +11,7 @@ import { AppService } from './app.service';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
+import { WordsModule } from './words/words.module';
 
 @Module({
   imports: [
@@ -22,13 +23,8 @@ import { UserService } from './user.service';
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     HttpModule,
+    WordsModule,
   ],
-  providers: [
-    AppService,
-    AppResolver,
-    PrismaService,
-    JwtStrategy,
-    UserService,
-  ],
+  providers: [AppService, AppResolver, PrismaService, JwtStrategy, UserService],
 })
 export class AppModule {}
