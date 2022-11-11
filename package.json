@@ -12,7 +12,10 @@
     "test": "nx run-many --parallel --target=test --projects=frontend,backend --coverage",
     "validate": "yarn lint && yarn test",
     "prisma:migrate-dev": "nx prisma-migrate backend dev",
-    "prisma:studio": "nx prisma-studio backend"
+    "prisma:studio": "nx prisma-studio backend",
+    "dev:update": "yarn; yarn prisma:migrate-dev; yarn console:dev import",
+    "console:dev": "ts-node --project apps/backend/tsconfig.console.json -r tsconfig-paths/register apps/backend/src/console.ts",
+    "console": "node dist/console.js"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +36,7 @@
     "cross-env": "^7.0.3",
     "graphql": "^16.6.0",
     "jwks-rsa": "^3.0.0",
+    "nestjs-console": "^8.0.0",
     "next": "13.0.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
