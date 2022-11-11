@@ -63,4 +63,5 @@ type Mutation {
 
 type Query {
   app: App!
+  categories: [Category!]!
 }

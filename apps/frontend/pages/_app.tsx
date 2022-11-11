@@ -8,10 +8,6 @@ import Authentication from '../components/Authentication';
 import './styles.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {
-  console.log(process.env.NEXT_PUBLIC_AUTH0_DOMAIN);
-  console.log(process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID);
-  console.log(process.env.NEXT_PUBLIC_AUTH0_AUDIENCE);
-  console.log(typeof window !== 'undefined' && window.location.origin);
   return (
     <Auth0Provider
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
