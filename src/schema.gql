@@ -57,6 +57,17 @@ type Game {
   words: Int!
 }
 
+type LeaderboardEntry {
+  """Place"""
+  place: Float!
+
+  """Score"""
+  score: Float!
+
+  """User"""
+  user: User!
+}
+
 type Mutation {
   createGame(createWordInput: CreateGameInput!): Game!
 }
@@ -64,4 +75,16 @@ type Mutation {
 type Query {
   app: App!
   categories: [Category!]!
+  leaderboard: [LeaderboardEntry!]!
+}
+
+type User {
+  """User ID"""
+  id: String!
+
+  """User Name"""
+  name: String!
+
+  """Url to the users picture"""
+  picture: String!
 }

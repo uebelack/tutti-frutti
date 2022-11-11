@@ -13,6 +13,7 @@ import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
 import { GameModule } from './game/game.module';
 import { CategoryModule } from './category/category.module';
+import { LeaderboardModule } from './leaderboard/leaderboard.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { CategoryModule } from './category/category.module';
     HttpModule,
     CategoryModule,
     GameModule,
+    LeaderboardModule,
   ],
   providers: [AppService, AppResolver, PrismaService, JwtStrategy, UserService],
 })

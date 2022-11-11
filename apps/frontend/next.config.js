@@ -24,6 +24,11 @@ const nextConfig = {
         hostname: 's.gravatar.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cloudflare-ipfs.com',
+        pathname: '/**',
+      },
     ],
   },
 };
