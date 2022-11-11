@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateGameInput {
+export class AnswerRoundInput {
   @Field(() => String, { description: 'Game ID' })
     gameId: string;
 
