@@ -4,7 +4,7 @@
 const { withNx } = require('@nrwl/next/plugins/with-nx');
 
 /**
- * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
+ * @type {import("@nrwl/next/plugins/with-nx").WithNxOptions}
  **/
 const nextConfig = {
   nx: {
@@ -17,6 +17,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: '*.googleusercontent.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 's.gravatar.com',
         pathname: '/**',
       },
     ],

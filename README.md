@@ -10,8 +10,10 @@
 ## Database
 
 1. Run `docker-compose up` to set up database container locally
+2. Run `yarn prisma:migrate-dev` to run migrations
 
 ### Prisma scripts
 
-`nx prisma-migrate backend dev` - runs migrations in development mode
-`nx prisma-studio backend` - opens prisma studio
+`yarn prisma:migrate-dev` - runs migrations in development mode
+
+`yarn prisma:studio` - opens prisma studio
