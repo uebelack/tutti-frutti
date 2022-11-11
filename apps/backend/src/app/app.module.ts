@@ -26,5 +26,6 @@ import { WordsModule } from './words/words.module';
     WordsModule,
   ],
   providers: [AppService, AppResolver, PrismaService, JwtStrategy, UserService],
+  exports: [PrismaService], // needed for console module
 })
 export class AppModule {}
