@@ -7,7 +7,7 @@
     "build": "nx run-many --parallel --target=build --projects=frontend,backend",
     "console:dev": "ts-node --project apps/backend/tsconfig.console.json -r tsconfig-paths/register apps/backend/src/console.ts",
     "console": "node dist/apps/console/main.js",
-    "dev:import": "yarn; yarn console:dev",
+    "dev:import": "yarn; yarn console:dev import",
     "dev:update": "yarn; yarn prisma:migrate-dev; yarn console:dev import",
     "lint:fix": "eslint . --fix --ext .ts",
     "lint": "eslint . --ext .ts",

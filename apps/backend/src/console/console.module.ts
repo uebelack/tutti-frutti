@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { ConsoleModule as NestConsoleModule } from 'nestjs-console';
 import { HttpModule } from '@nestjs/axios';
-import { AppModule } from '../app/app.module';
 import { ImportTask } from './tasks/import.task';
+
+import { PrismaService } from '../app/prisma.service';
 
 @Module({
   imports: [
-    AppModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     NestConsoleModule,
     HttpModule,
   ],
-  providers: [ImportTask],
+  providers: [ImportTask, PrismaService],
 })
 export class ConsoleModule {}
