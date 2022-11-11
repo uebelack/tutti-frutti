@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WordsResolver } from './words.resolver';
-import { WordsService } from './words.service';
+import { GameResolver } from './game.resolver';
+import { GameService } from './game.service';
 
 describe('WordsResolver', () => {
-  let resolver: WordsResolver;
+  let resolver: GameResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [WordsResolver, WordsService],
+      providers: [GameResolver, GameService],
     }).compile();
 
-    resolver = module.get<WordsResolver>(WordsResolver);
+    resolver = module.get<GameResolver>(GameResolver);
   });
 
   it('should be defined', () => {
