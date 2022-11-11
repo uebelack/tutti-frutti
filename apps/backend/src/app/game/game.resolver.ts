@@ -1,9 +1,13 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Req, UseGuards } from '@nestjs/common';
+import {
+  Args, Context, Mutation, Resolver,
+} from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameInput } from './dto/create-game.input';
 import { Game } from './entities/game.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { GraphQLContext } from '../../types/graphQlContext';
+import { AnswerRoundInput } from './dto/answer-round.input';
 
 @Resolver(() => Game)
 export class GameResolver {
@@ -13,9 +17,20 @@ export class GameResolver {
   @Mutation(() => Game)
   createGame(
   @Args('createWordInput') createWordInput: CreateGameInput,
-    @Req() req: Request,
+    @Context() context: GraphQLContext,
   ) {
-    console.log(req);
-    // return this.wordsService.startGame(createWordInput);
+    return this.wordsService.startGame(context.req.user.sub, createWordInput);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Game)
+  answerRound(
+  @Args('answerRoundInput') answerRoundInput: AnswerRoundInput,
+    @Context() context: GraphQLContext,
+  ) {
+    return this.wordsService.answerRound(
+      context.req.user.sub,
+      answerRoundInput,
+    );
   }
 }

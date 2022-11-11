@@ -5,6 +5,7 @@ import { PrismaService } from '../prisma.service';
 import { CreateGameInput } from './dto/create-game.input';
 import { Game } from './entities/game.entity';
 import { Word } from './entities/word.entity';
+import { AnswerRoundInput } from './dto/answer-round.input';
 
 @Injectable()
 export class GameService {
@@ -17,14 +18,14 @@ export class GameService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async startGame(
-    userId: string,
+    auth0Id: string,
     createGameInput: CreateGameInput,
   ): Promise<Game> {
     const game = await this.prismaService.game.create({
       data: {
         user: {
           connect: {
-            id: userId,
+            auth0: auth0Id,
           },
         },
         categories: {
@@ -37,7 +38,7 @@ export class GameService {
       },
     });
 
-    const round = await this.getRound(userId, game.id);
+    const round = await this.getRound(auth0Id, game.id);
 
     return {
       ...game,
@@ -47,14 +48,13 @@ export class GameService {
   }
 
   async answerRound(
-    userId: string,
-    gameId: string,
-    wordId: string,
+    auth0Id: string,
+    answerRoundInput: AnswerRoundInput,
   ): Promise<Game> {
-    const game = await this.findGame(userId, gameId);
+    const game = await this.findGame(auth0Id, answerRoundInput.gameId);
 
     const lastWord = game.words[game.words.length - 1];
-    const correct = lastWord.id === wordId;
+    const correct = lastWord.id === answerRoundInput.wordId;
 
     const updatedGame = await this.prismaService.game.update({
       where: {
@@ -73,7 +73,7 @@ export class GameService {
       },
     });
 
-    const round = await this.getRound(userId, game.id);
+    const round = await this.getRound(auth0Id, game.id);
 
     return {
       ...updatedGame,
@@ -84,13 +84,13 @@ export class GameService {
   }
 
   private async getRound(
-    userId: string,
+    auth0Id: string,
     gameId: string,
   ): Promise<{
       categoryName: string;
       words: Pick<Word, 'id' | 'text'>[];
     }> {
-    const game = await this.findGame(userId, gameId);
+    const game = await this.findGame(auth0Id, gameId);
 
     const correctWords = await this.prismaService.word.findMany({
       where: {
@@ -139,11 +139,13 @@ export class GameService {
     };
   }
 
-  private async findGame(userId: string, gameId: string) {
+  private async findGame(auth0Id: string, gameId: string) {
     const game = await this.prismaService.game.findFirst({
       where: {
         id: gameId,
-        userId,
+        user: {
+          auth0: auth0Id,
+        },
       },
       include: {
         categories: true,
