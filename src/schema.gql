@@ -2,6 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AnswerRoundInput {
+  """Game ID"""
+  gameId: String!
+
+  """Category ID"""
+  wordId: String!
+}
+
 """app"""
 type App {
   serverTime: DateTime!
@@ -69,6 +77,7 @@ type LeaderboardEntry {
 }
 
 type Mutation {
+  answerRound(answerRoundInput: AnswerRoundInput!): Game!
   createGame(createWordInput: CreateGameInput!): Game!
 }
 
