@@ -38,8 +38,8 @@ input FiftyFiftyInput {
   """Game ID"""
   gameId: String!
 
-  """Word IDs of current game"""
-  words: String!
+  """Words of current game"""
+  words: [WordInput!]!
 }
 
 type Game {
@@ -106,9 +106,17 @@ type User {
 }
 
 type Word {
-  """Word Text"""
-  fiftyFiftyWrong: String!
+  """Is wrong"""
+  fiftyFiftyWrong: Boolean
 
+  """Word ID"""
+  id: String!
+
+  """Word Text"""
+  text: String!
+}
+
+input WordInput {
   """Word ID"""
   id: String!
 

@@ -1,11 +1,11 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { Word } from '../../entities/word.entity';
+import { WordInput } from './word.input';
 
 @InputType()
 export class FiftyFiftyInput {
   @Field(() => String, { description: 'Game ID' })
     gameId: string;
 
-  @Field(() => String, { description: 'Word IDs of current game' })
-    words: Word[];
+  @Field(() => [WordInput], { description: 'Words of current game' })
+    words: WordInput[];
 }

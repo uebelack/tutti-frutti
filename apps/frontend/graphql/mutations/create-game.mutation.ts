@@ -1,23 +1,11 @@
 import { gql } from '@apollo/client';
+import { GAME_INPUT_FRAGMENT } from '../fragments/game-input.fragment';
 
 export const CREATE_GAME = gql`
+  ${GAME_INPUT_FRAGMENT}
   mutation CreateGame($createGameInput: CreateGameInput!) {
     createGame(createGameInput: $createGameInput) {
-      id
-      categories {
-        id
-        name
-      }
-      createdAt
-      fiftyFiftyUses
-      round
-      categoryName
-      score
-      words {
-        id
-        text
-      }
-      previousRoundCorrect
+      ...GameInputFragment
     }
   }
 `;

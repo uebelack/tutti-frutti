@@ -1,16 +1,17 @@
 import cn from 'classnames';
 import React from 'react';
+import s from './Button.module.css';
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * @default 'blue
    */
-  color?: 'blue' | 'white';
+  color?: 'blue' | 'white' | 'outlined' | 'purple';
   /**
    * @default 'default'
    */
-  shape?: 'rounded' | 'default';
+  shape?: 'rounded' | 'default' | 'pill';
 }
 
 export function Button({
@@ -21,19 +22,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   return (
-    <button
-      className={cn(
-        {
-          'bg-white text-black hover:bg-opacity-80': color === 'white',
-          'bg-blue-dark text-white hover:bg-blue': color === 'blue',
-          'rounded-md  py-3.5': shape === 'default',
-          'rounded-4xl py-2.5': shape === 'rounded',
-        },
-        'px-6 transition-colors duration-200',
-        className
-      )}
-      {...rest}
-    >
+    <button className={cn(s.root, s[color], s[shape], '', className)} {...rest}>
       {children}
     </button>
   );

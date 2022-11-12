@@ -15,6 +15,7 @@ export const GAME_INPUT_FRAGMENT = gql`
     words {
       id
       text
+      fiftyFiftyWrong
     }
     previousRoundCorrect
   }

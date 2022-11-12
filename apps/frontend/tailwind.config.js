@@ -1,7 +1,7 @@
 const { join } = require('path');
 const defaultTheme = require('tailwindcss/defaultTheme');
 
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 
 module.exports = {
   content: [

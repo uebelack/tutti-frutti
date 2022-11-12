@@ -18,7 +18,7 @@ import { CategoryService } from '../category/category.service';
 export class GameService {
   private readonly WORDS_PER_ROUND = 4;
 
-  private readonly TIME_LIMIT_SEC = 60;
+  private readonly TIME_LIMIT_SEC = 360;
 
   private readonly CORRECT_ANSWER_POINTS = 10;
 
@@ -136,7 +136,9 @@ export class GameService {
         id: game.id,
       },
       data: {
-        fiftyFiftyUses: game.fiftyFiftyUses + 1,
+        fiftyFiftyUses: {
+          increment: 1,
+        },
       },
     });
 
@@ -196,9 +198,12 @@ export class GameService {
     const game = await this.findGame(auth0Id, gameId);
 
     const gameCategoryIds = game.categories.map((c) => c.id);
-    const nextCategory = sample((await this.categoryService.findAll()).filter((c) => gameCategoryIds.includes(c.id)));
+    const nextCategory = sample(
+      (await this.categoryService.findAll()).filter((c) => gameCategoryIds.includes(c.id)),
+    );
 
-    const correctWord = (await this.prismaService.$queryRaw`
+    const correctWord = (
+      (await this.prismaService.$queryRaw`
       SELECT
         w.id,
         w.text
@@ -208,7 +213,8 @@ export class GameService {
         "categoryId"=${nextCategory.id}
         AND id not in (SELECT "B" FROM "_GameToWord" WHERE "A"=${gameId})
       ORDER BY random() limit 1;
-    ` as { id: string; text: string; }[])[0];
+    `) as { id: string; text: string }[]
+    )[0];
 
     const character = correctWord.text.charAt(0);
 

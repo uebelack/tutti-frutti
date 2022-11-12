@@ -1,0 +1,31 @@
+.root {
+  @apply disabled:opacity-50 px-6 transition-colors duration-200;
+}
+
+.white {
+  @apply bg-white text-black enabled:hover:bg-opacity-80;
+}
+
+.blue {
+  @apply bg-blue-dark text-white enabled:hover:bg-blue;
+}
+
+.purple {
+  @apply bg-primary-95 text-secondary-10 text-xs;
+}
+
+.outlined {
+  @apply border border-solid border-secondary-90 enabled:hover:bg-primary-60;
+}
+
+.default {
+  @apply rounded-md  py-3.5;
+}
+
+.rounded {
+  @apply rounded-4xl py-2.5;
+}
+
+.pill {
+  @apply px-0 rounded-full w-11 h-11 flex items-center justify-center;
+}
