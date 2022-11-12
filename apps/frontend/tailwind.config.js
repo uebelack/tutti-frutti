@@ -5,13 +5,13 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   content: [
-    join(__dirname, 'src/**/!(*.stories|*.spec).{ts,html}'),
-    join(__dirname, '../../libs/ui/src/**/!(*.stories|*.spec).{ts,html}'),
+    join(__dirname, './**/!(*.stories|*.spec).{ts,tsx,html}'),
+    join(__dirname, '../../libs/ui/src/**/!(*.stories|*.spec).{ts,tsx,html}'),
   ],
   theme: {
     extend: {
       colors: {
-        blue: '#204DCC',
+        blue: { DEFAULT: '#204DCC', dark: '#1F4BC6' },
         primary: {
           10: '#21005D',
           20: '#381E72',
@@ -174,6 +174,9 @@ module.exports = {
             letterSpacing: '0em',
           },
         ],
+      },
+      borderRadius: {
+        '4xl': '100px',
       },
     },
   },
