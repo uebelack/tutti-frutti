@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import { Button } from 'UI';
-import { CATEGORIES } from './queries';
+import { CATEGORIES } from '../../graphql/queries/categories.query';
 
 const CategoriesPicker = ({
   onSelect,

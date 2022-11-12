@@ -14,16 +14,3 @@ export interface Round {
     text: string;
   }[];
 }
-
-export interface CreateGameInput {
-  createGameInput: {
-    categories: string[];
-  };
-}
-
-export interface AnswerRoundInput {
-  answerRoundInput: {
-    gameId: string;
-    wordId: string;
-  };
-}

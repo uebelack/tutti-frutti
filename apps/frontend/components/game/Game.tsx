@@ -2,17 +2,18 @@ import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { Errors } from '@toptal-hackathon-t2/types';
 import CategoriesPicker from './CategoriesPicker';
-import { ANSWER_ROUND, CREATE_GAME } from './queries';
-import { AnswerRoundInput, CreateGameInput, Round } from './types';
 import GameRound from './GameRound';
+import { AnswerRoundInput, CreateGameInput, Round } from '../../types';
+import { ANSWER_ROUND } from '../../graphql/mutations/answer-round.mutation';
+import { CREATE_GAME } from '../../graphql/mutations/create-game.mutation';
 
 const Game = (): JSX.Element => {
   const [createGame] = useMutation<{ createGame: Round }, CreateGameInput>(
-    CREATE_GAME,
+    CREATE_GAME
   );
 
   const [answerRound] = useMutation<{ answerRound: Round }, AnswerRoundInput>(
-    ANSWER_ROUND,
+    ANSWER_ROUND
   );
 
   const [round, setRound] = useState<Round>();
