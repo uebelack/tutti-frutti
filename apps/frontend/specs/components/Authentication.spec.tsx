@@ -2,17 +2,17 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import Authentication from '../../components/auth/Authentication';
+import AuthenticationCheckProvider from '../../components/providers/AuthenticationCheckProvider';
 
 jest.mock('@auth0/auth0-react', () => ({ useAuth0: jest.fn() }));
 
-describe('<Authentication/>', () => {
+describe('<AuthenticationCheckProvider/>', () => {
   it('should show loader', async () => {
     (useAuth0 as jest.Mock).mockReturnValue({ isLoading: true });
     render(
-      <Authentication>
+      <AuthenticationCheckProvider>
         <div>Test</div>
-      </Authentication>,
+      </AuthenticationCheckProvider>
     );
     expect(await screen.findByText('loading...')).toBeInTheDocument();
   });
@@ -20,9 +20,9 @@ describe('<Authentication/>', () => {
   it('should show login button', async () => {
     (useAuth0 as jest.Mock).mockReturnValue({});
     render(
-      <Authentication>
+      <AuthenticationCheckProvider>
         <div>Test</div>
-      </Authentication>,
+      </AuthenticationCheckProvider>
     );
     expect(await screen.findByRole('button')).toHaveTextContent('Login');
   });
@@ -30,9 +30,9 @@ describe('<Authentication/>', () => {
   it('should show children', async () => {
     (useAuth0 as jest.Mock).mockReturnValue({ isAuthenticated: true });
     render(
-      <Authentication>
+      <AuthenticationCheckProvider>
         <div>Test</div>
-      </Authentication>,
+      </AuthenticationCheckProvider>
     );
     expect(await screen.findByText('Test')).toBeInTheDocument();
   });
