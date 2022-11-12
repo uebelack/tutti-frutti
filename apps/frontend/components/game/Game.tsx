@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+import { Errors } from '@toptal-hackathon-t2/types';
 import CategoriesPicker from './CategoriesPicker';
 import { ANSWER_ROUND, CREATE_GAME } from './queries';
 import { AnswerRoundInput, CreateGameInput, Round } from './types';
@@ -29,16 +30,25 @@ const Game = (): JSX.Element => {
   };
 
   const onAnswerRound = async (wordId: string) => {
-    const currentRound = await answerRound({
-      variables: {
-        answerRoundInput: {
-          gameId: round.id,
-          wordId,
+    try {
+      const currentRound = await answerRound({
+        variables: {
+          answerRoundInput: {
+            gameId: round.id,
+            wordId,
+          },
         },
-      },
-    });
+      });
 
-    setRound(currentRound.data.answerRound);
+      setRound(currentRound.data.answerRound);
+    } catch (error) {
+      if (error.message === Errors.TIME_IS_UP) {
+        // TODO IMPLEMENT
+        setRound(undefined);
+        return;
+      }
+      throw error;
+    }
   };
 
   return (

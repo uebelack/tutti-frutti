@@ -49,9 +49,10 @@ model Game {
   categories     Category[]
   user           User       @relation(fields: [userId], references: [id])
   words          Word[]
-  lastWord       Word?       @relation(name: "LastWord", fields: [wordId], references: [id])
+  lastWord       Word?      @relation(name: "LastWord", fields: [wordId], references: [id])
   score          Int        @default(0)
   fiftyFiftyUses Int        @default(0)
+  timesSkipped   Int        @default(0)
   userId         String
   wordId         String?
 }
