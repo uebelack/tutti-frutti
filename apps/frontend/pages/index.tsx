@@ -5,12 +5,8 @@ import LogoutButton from '../components/LogoutButton';
 import Categories from '../components/Categories';
 import Leaderboard from '../components/Leaderboard';
 
-const QUERY = gql`
-  query {app {serverTime}}
-`;
 
 function Index() {
-  const { data } = useQuery(QUERY);
   const { user } = useAuth0();
 
   return (
@@ -20,7 +16,7 @@ function Index() {
     <Categories />
     <Leaderboard />
     <LogoutButton />
-    <p>2022 copyright T² - {data?.app?.serverTime}</p>
+    <p>2022 copyright T²</p>
     </div>
   );
 }

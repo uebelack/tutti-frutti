@@ -10,11 +10,6 @@ input AnswerRoundInput {
   wordId: String!
 }
 
-"""app"""
-type App {
-  serverTime: DateTime!
-}
-
 type Category {
   """Category Description"""
   description: String
@@ -82,7 +77,6 @@ type Mutation {
 }
 
 type Query {
-  app: App!
   categories: [Category!]!
   leaderboard: [LeaderboardEntry!]!
 }
