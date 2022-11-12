@@ -67,7 +67,7 @@ export class GameService {
   ): Promise<Game> {
     const game = await this.findGame(auth0Id, answerRoundInput.gameId);
 
-    const timedOut = game.createdAt.getTime() - Date.now() > this.TIME_LIMIT_SEC * 1e3;
+    const timedOut = game.createdAt.getTime() - Date.now() > this.TIME_LIMIT_SEC * 1e3; // TODO probably not working
     if (timedOut) {
       throw new ConflictException('Time is up');
     }

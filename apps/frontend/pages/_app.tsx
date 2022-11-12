@@ -3,7 +3,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 
 import Head from 'next/head';
 import SecureApolloProvider from '../components/SecureApolloProvider';
-import Authentication from '../components/Authentication';
+import Authentication from '../components/auth/Authentication';
 
 import './styles.css';
 

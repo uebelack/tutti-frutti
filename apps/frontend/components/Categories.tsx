@@ -1,14 +1,11 @@
-import { useQuery, gql } from '@apollo/client';
-import { useAuth0 } from '@auth0/auth0-react';
-import Image from 'next/image';
-import LogoutButton from '../components/LogoutButton';
+import { gql, useQuery } from '@apollo/client';
 
 const QUERY = gql`
   query {
     categories {
-      id,
-      emoji,
-      name,
+      id
+      emoji
+      name
       description
     }
   }
@@ -19,7 +16,13 @@ function Categories() {
 
   return (
     <ul>
-      {data && data.categories.map((category) => (<li>{category.emoji}{category.name}</li>))}
+      {data
+        && data.categories.map((category) => (
+          <li key={category.name}>
+            {category.emoji}
+            {category.name}
+          </li>
+        ))}
     </ul>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import LoginButton from '../../components/LoginButton';
+import LoginButton from '../../components/auth/LoginButton';
 
 describe('<LoginButton/>', () => {
   it('should show login button', async () => {
