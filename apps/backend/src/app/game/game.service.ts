@@ -253,7 +253,7 @@ export class GameService {
     };
   }
 
-  private async findGame(auth0Id: string, gameId: string) {
+  async findGame(auth0Id: string, gameId: string) {
     const game = await this.prismaService.game.findFirst({
       where: {
         id: gameId,

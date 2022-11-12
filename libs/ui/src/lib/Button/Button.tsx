@@ -30,7 +30,7 @@ export function Button({
           'rounded-4xl py-2.5': shape === 'rounded',
         },
         'px-6 transition-colors duration-200',
-        className
+        className,
       )}
       {...rest}
     >

@@ -32,7 +32,7 @@ describe('GameService', () => {
   });
 
   it('should throw an error if user already used all his jokers', async () => {
-    prisma.game.findFirst.mockResolvedValueOnce({ words: [{ id: 'c' }], fiftyFiftyUses: 1 });
+    prisma.game.findFirst.mockResolvedValueOnce({ words: [{ id: 'c' }], fiftyFiftyUses: 1, createdAt: new Date() });
     prisma.category.findFirst.mockResolvedValueOnce({ name: 'Test Category' });
 
     try {
@@ -54,7 +54,7 @@ describe('GameService', () => {
   it('should return game with 50% of words marked as wrong and update game fiftyFiftyUses', async () => {
     prisma.game.findFirst.mockResolvedValueOnce(
       {
-        id: 'abc', fiftyFiftyUses: 0, words: [{ id: 'c' }], lastWord: { id: 'c' },
+        id: 'abc', fiftyFiftyUses: 0, words: [{ id: 'c' }], lastWord: { id: 'c' }, createdAt: new Date(),
       },
     );
     prisma.category.findFirst.mockResolvedValueOnce({ name: 'Test Category' });
