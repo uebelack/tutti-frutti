@@ -1,3 +1,12 @@
-export { ReactComponent as MenuIcon } from './icons/Menu.svg';
+export { ReactComponent as AwardIcon } from './icons/Award.svg';
+export { ReactComponent as CloseIcon } from './icons/Close.svg';
+export { ReactComponent as CopyIcon } from './icons/Copy.svg';
 export { ReactComponent as ExpandIcon } from './icons/Expand.svg';
+export { ReactComponent as HistoryIcon } from './icons/History.svg';
+export { ReactComponent as InfoCircleIcon } from './icons/InfoCircle.svg';
+export { ReactComponent as LeaderboardIcon } from './icons/Leaderboard.svg';
+export { ReactComponent as LogoutIcon } from './icons/Logout.svg';
+export { ReactComponent as MenuIcon } from './icons/Menu.svg';
+export { ReactComponent as SettingsIcon } from './icons/Settings.svg';
+export { ReactComponent as ShareIcon } from './icons/Share.svg';
 export { ReactComponent as ShrinkIcon } from './icons/Shrink.svg';

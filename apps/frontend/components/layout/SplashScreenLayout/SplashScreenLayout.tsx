@@ -7,12 +7,14 @@ import BGMobile from '../../../public/splash-bg-mobile.png';
 
 /* eslint-disable-next-line */
 export interface SplashScreenLayoutProps {
+  noAnimation?: boolean;
   children: ReactNode | ReactNode[];
 }
 
-const AnimatedImage = motion(Image);
-
-export function SplashScreenLayout({ children }: SplashScreenLayoutProps) {
+export function SplashScreenLayout({
+  noAnimation,
+  children,
+}: SplashScreenLayoutProps) {
   const [showLogo, setShowLogo] = useState(false);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export function SplashScreenLayout({ children }: SplashScreenLayoutProps) {
       />
       <div className="relative container mx-auto h-full grid place-items-center">
         <div className="w-full text-center flex flex-col items-center gap-24">
-          {showLogo && (
+          {showLogo && !noAnimation && (
             <>
               <motion.div
                 initial={{ opacity: 0, y: '100%' }}

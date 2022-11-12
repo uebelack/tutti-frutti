@@ -1,8 +1,7 @@
 import cn from 'classnames';
-import React from 'react';
+import { ElementType, forwardRef } from 'react';
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttribute<HTMLButtonElement> {
   /**
    * @default 'blue
    */
@@ -11,32 +10,44 @@ export interface ButtonProps
    * @default 'default'
    */
   shape?: 'rounded' | 'default';
+  /**
+   * @default 'button'
+   */
+  Component?: ElementType;
 }
 
-export function Button({
-  color = 'blue',
-  shape = 'default',
-  className,
-  children,
-  ...rest
-}: ButtonProps) {
-  return (
-    <button
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      color = 'blue',
+      shape = 'default',
+      className,
+      Component = 'button',
+      children,
+      ...rest
+    },
+    ref
+  ) => (
+    <Component
+      role="button"
       className={cn(
         {
-          'bg-white text-black hover:bg-opacity-80': color === 'white',
-          'bg-blue-dark text-white hover:bg-blue': color === 'blue',
+          'bg-white text-black': color === 'white',
+          'bg-blue-dark text-white': color === 'blue',
           'rounded-md  py-3.5': shape === 'default',
           'rounded-4xl py-2.5': shape === 'rounded',
         },
-        'px-6 transition-colors duration-200',
-        className,
+        'px-6 transition-colors duration-200 hover:bg-blue hover:bg-opacity-10',
+        className
       )}
       {...rest}
+      ref={ref}
     >
       {children}
-    </button>
-  );
-}
+    </Component>
+  )
+);
+
+Button.displayName = 'Button';
 
 export default Button;
