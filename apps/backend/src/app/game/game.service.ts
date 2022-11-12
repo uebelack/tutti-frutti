@@ -3,8 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { sample, shuffle } from 'lodash';
-import { pick } from 'next/dist/lib/pick';
+import { sample, sampleSize, shuffle } from 'lodash';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateGameInput } from './dto/create-game.input';
 import { Game } from '../entities/game.entity';
@@ -27,7 +26,10 @@ export class GameService {
 
   private readonly FIFTY_FIFTY_TOP = 2;
 
-  constructor(private readonly prismaService: PrismaService, private leaderboardService: LeaderboardService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private leaderboardService: LeaderboardService,
+  ) {}
 
   async startGame(
     auth0Id: string,
@@ -50,7 +52,7 @@ export class GameService {
       },
     });
 
-    const round = await this.getRound(auth0Id, game.id);
+    const round = await this.getWordsAndCategoryForRound(auth0Id, game.id);
 
     return {
       ...game,
@@ -70,8 +72,7 @@ export class GameService {
       throw new ConflictException('Time is up');
     }
 
-    const lastWord = game.words[game.words.length - 1];
-    const correct = lastWord.id === answerRoundInput.wordId;
+    const isCorrect = game.lastWord?.id === answerRoundInput.wordId;
 
     const updatedGame = await this.prismaService.game.update({
       where: {
@@ -79,7 +80,7 @@ export class GameService {
       },
       data: {
         score: {
-          increment: correct
+          increment: isCorrect
             ? this.CORRECT_ANSWER_POINTS
             : this.INCORRECT_ANSWER_POINTS,
         },
@@ -90,35 +91,42 @@ export class GameService {
       },
     });
 
-    const round = await this.getRound(auth0Id, game.id);
+    const round = await this.getWordsAndCategoryForRound(auth0Id, game.id);
 
     return {
       ...updatedGame,
       ...round,
       round: updatedGame.words.length,
-      previousRoundCorrect: correct,
+      previousRoundCorrect: isCorrect,
     };
   }
 
-  async useFiftyFifty(auth0Id: string, fiftyFiftyInput: FiftyFiftyInput): Promise<Game> {
+  async useFiftyFifty(
+    auth0Id: string,
+    fiftyFiftyInput: FiftyFiftyInput,
+  ): Promise<Game> {
     const game = await this.findGame(auth0Id, fiftyFiftyInput.gameId);
     const isUserInLeaderboard = await this.leaderboardService.isUserInLeaderboard(auth0Id);
-    const maxFiftyFifty = isUserInLeaderboard ? this.FIFTY_FIFTY_TOP : this.FIFTY_FIFTY_DEFAULT;
+    const maxFiftyFifty = isUserInLeaderboard
+      ? this.FIFTY_FIFTY_TOP
+      : this.FIFTY_FIFTY_DEFAULT;
 
     if (game.fiftyFiftyUses >= maxFiftyFifty) {
       throw new ConflictException('No more lifelines available');
     }
 
-    const currentCorrectWord = game.words[game.words.length - 1];
-
     // IMP CACHE for performance?
     const currentCategory = await this.prismaService.category.findFirst({
       where: {
-        id: currentCorrectWord.categoryId,
+        id: game.lastWord.categoryId,
       },
     });
 
-    const incorrectWordIdsToShow = shuffle(fiftyFiftyInput.words.map((word) => word.id).filter((id) => id !== currentCorrectWord.id)).slice(0, this.WORDS_PER_ROUND / 2);
+    const incorrectWordIdsToShow = shuffle(
+      fiftyFiftyInput.words
+        .map((word) => word.id)
+        .filter((id) => id !== game.lastWord.id),
+    ).slice(0, Math.floor(this.WORDS_PER_ROUND / 2));
 
     await this.prismaService.game.update({
       where: {
@@ -132,12 +140,15 @@ export class GameService {
     return {
       ...game,
       categoryName: currentCategory.name,
-      words: fiftyFiftyInput.words.map((word) => ({ ...word, fiftyFiftyWrong: incorrectWordIdsToShow.indexOf(word.id) !== -1 })),
+      words: fiftyFiftyInput.words.map((word) => ({
+        ...word,
+        fiftyFiftyWrong: incorrectWordIdsToShow.indexOf(word.id) !== -1,
+      })),
       round: game.words.length,
     };
   }
 
-  private async getRound(
+  private async getWordsAndCategoryForRound(
     auth0Id: string,
     gameId: string,
   ): Promise<{
@@ -161,18 +172,17 @@ export class GameService {
     });
     const correctWord = sample(correctWords); // IMP move to SQL for performance
 
-    const incorrectWords = await this.prismaService.word.findMany({
+    const allIncorrectWords = await this.prismaService.word.findMany({
       where: {
         categoryId: {
           notIn: game.categories.map((c) => c.id),
         },
       },
-      take: this.WORDS_PER_ROUND - 1,
-      select: {
-        id: true,
-        text: true,
-      },
     });
+    const incorrectWords = sampleSize(
+      allIncorrectWords,
+      this.WORDS_PER_ROUND - 1,
+    );
 
     await this.prismaService.game.update({
       where: {
@@ -184,12 +194,17 @@ export class GameService {
             id: correctWord.id,
           },
         },
+        lastWord: {
+          connect: {
+            id: correctWord.id,
+          },
+        },
       },
     });
 
     return {
       categoryName: correctWord.category.name,
-      words: shuffle([pick(correctWord, ['id', 'text']), ...incorrectWords]),
+      words: shuffle([correctWord, ...incorrectWords]),
     };
   }
 
@@ -204,6 +219,7 @@ export class GameService {
       include: {
         categories: true,
         words: true,
+        lastWord: true,
       },
     });
 
