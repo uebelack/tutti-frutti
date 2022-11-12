@@ -64,8 +64,11 @@ type Game {
   """Current round number"""
   round: Int!
 
+  """Current score"""
+  score: Int!
+
   """Current round words"""
-  words: Word!
+  words: [Word!]!
 }
 
 type LeaderboardEntry {
