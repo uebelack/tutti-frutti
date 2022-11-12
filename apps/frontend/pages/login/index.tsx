@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import SplashScreenLayout from 'apps/frontend/components/layout/SplashScreenLayout/SplashScreenLayout';
 import { Button } from 'UI';
+import SplashScreenLayout from '../../components/layout/SplashScreenLayout/SplashScreenLayout';
 
 export const Login = () => {
   const { loginWithRedirect } = useAuth0();

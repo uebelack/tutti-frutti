@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
+import { Button } from 'UI';
 
 const QUERY = gql`
   query {
@@ -26,13 +27,16 @@ function Categories({ onCategoriesSelected }) {
 
   return (
     <div>
+      <h1>Select Categories</h1>
       <ul>
         {data && data.categories.map((category) => (
         <li key={category.id}>
           {category.emoji}{category.name}<input type="checkbox" checked={selectedCategories.includes(category)} onChange={() => handleOnChange(category)}/>
         </li>))}
       </ul>
-      <button onClick={() => onCategoriesSelected(selectedCategories)}>Confirm</button>
+      <Button color="blue" className="text-title-lg" onClick={() => onCategoriesSelected(selectedCategories)}>
+      Confirm
+      </Button>
     </div>
   );
 }
