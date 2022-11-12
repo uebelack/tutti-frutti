@@ -1,16 +1,6 @@
 import { Button } from 'UI';
 import { GameType } from '../../types';
 
-interface Props {
-  round: GameType;
-
-  onSelect(id: string): void;
-
-  onSkip(): void;
-
-  onFiftyFifty(): void;
-}
-
 const getNthAlphabetLetter = (n: number) => String.fromCharCode(65 + n);
 
 const MessageBar = ({ round }: { round: GameType }): JSX.Element => (
@@ -25,11 +15,24 @@ const MessageBar = ({ round }: { round: GameType }): JSX.Element => (
   </div>
 );
 
+interface Props {
+  round: GameType;
+
+  fiftyFiftyDisabled: boolean;
+
+  onSelect(id: string): void;
+
+  onSkip(): void;
+
+  onFiftyFifty(): void;
+}
+
 const GameRound = ({
   round,
   onSelect,
   onSkip,
   onFiftyFifty,
+  fiftyFiftyDisabled,
 }: Props): JSX.Element => {
   const fiftyFiftyUsed = round.words.some((w) => w.fiftyFiftyWrong);
 
@@ -60,7 +63,7 @@ const GameRound = ({
             shape="pill"
             color="purple"
             onClick={onFiftyFifty}
-            disabled={fiftyFiftyUsed}
+            disabled={fiftyFiftyUsed || fiftyFiftyDisabled}
           >
             50:50
           </Button>

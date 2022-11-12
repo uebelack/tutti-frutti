@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { Errors } from '@toptal-hackathon-t2/types';
 import { pick } from 'next/dist/lib/pick';
+import { useRouter } from 'next/router';
 import CategoriesPicker from './CategoriesPicker';
 import GameRound from './GameRound';
 import { AnswerRoundInput, CreateGameInput, GameType } from '../../types';
@@ -10,18 +11,21 @@ import { CREATE_GAME } from '../../graphql/mutations/create-game.mutation';
 import { SKIP_ROUND } from '../../graphql/mutations/skip-round.mutation';
 import { USE_FIFTY_FIFTY } from '../../graphql/mutations/use-fifty-fifty';
 import { FiftyFiftyInput } from '../../types/fifty-fifty-input';
-import { useRouter } from 'next/router';
 
 const Game = (): JSX.Element => {
   const router = useRouter();
   const [round, setRound] = useState<GameType>();
+  const [noMoreFiftyFifty, setNoMoreFiftyFifty] = useState(false);
 
   const mutationsOptions = {
     onError: (error) => {
       if (error.message === Errors.TIME_IS_UP) {
-        return router.replace(`/result/${round.id}`);
+        router.replace(`/result/${round.id}`);
+      } else if (error.message === Errors.NO_MORE_50_50) {
+        setNoMoreFiftyFifty(true);
+      } else {
+        throw error;
       }
-      throw error;
     },
   };
 
@@ -96,6 +100,7 @@ const Game = (): JSX.Element => {
           onSelect={onAnswerRound}
           onSkip={onSkipRound}
           onFiftyFifty={onFiftyFifty}
+          fiftyFiftyDisabled={noMoreFiftyFifty}
         />
       )}
     </div>
