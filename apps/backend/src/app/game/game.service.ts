@@ -107,12 +107,21 @@ export class GameService {
       },
     });
 
-    const incorrectWordsToShow = shuffle(fiftyFiftyInput.wordIds.filter((id) => id !== currentCorrectWord.id)).slice(0, this.WORDS_PER_ROUND / 2);
+    const incorrectWordIdsToShow = shuffle(fiftyFiftyInput.words.map((word) => word.id).filter((id) => id !== currentCorrectWord.id)).slice(0, this.WORDS_PER_ROUND / 2);
+
+    await this.prismaService.game.update({
+      where: {
+        id: game.id,
+      },
+      data: {
+        fiftyFiftyUses: game.fiftyFiftyUses + 1,
+      },
+    });
 
     return {
       ...game,
-      words: game.words.map((word) => ({ ...word, fiftyFiftyWrong: incorrectWordsToShow.indexOf(word.id) !== -1 })),
       categoryName: currentCategory.name,
+      words: fiftyFiftyInput.words.map((word) => ({ ...word, fiftyFiftyWrong: incorrectWordIdsToShow.indexOf(word.id) !== -1 })),
       round: game.words.length,
     };
   }
