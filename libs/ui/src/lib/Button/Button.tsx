@@ -22,7 +22,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   return (
-    <button className={cn(s.root, s[color], s[shape], '', className)} {...rest}>
+    <button className={cn(s.root, s[color], s[shape], className)} {...rest}>
       {children}
     </button>
   );

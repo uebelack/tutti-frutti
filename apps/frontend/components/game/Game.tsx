@@ -10,16 +10,16 @@ import { CREATE_GAME } from '../../graphql/mutations/create-game.mutation';
 import { SKIP_ROUND } from '../../graphql/mutations/skip-round.mutation';
 import { USE_FIFTY_FIFTY } from '../../graphql/mutations/use-fifty-fifty';
 import { FiftyFiftyInput } from '../../types/fifty-fifty-input';
+import { useRouter } from 'next/router';
 
 const Game = (): JSX.Element => {
+  const router = useRouter();
   const [round, setRound] = useState<GameType>();
 
   const mutationsOptions = {
     onError: (error) => {
       if (error.message === Errors.TIME_IS_UP) {
-        // TODO IMPLEMENT
-        setRound(undefined);
-        return;
+        return router.replace(`/result/${round.id}`);
       }
       throw error;
     },
