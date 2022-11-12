@@ -1,7 +1,5 @@
+import React, { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
-import { useAuth0 } from '@auth0/auth0-react';
-import Image from 'next/image';
-import LogoutButton from '../components/LogoutButton';
 
 const QUERY = gql`
   query {
@@ -14,13 +12,28 @@ const QUERY = gql`
   }
 `;
 
-function Categories() {
-  const { data } = useQuery(QUERY);
+function Categories({ onCategoriesSelected }) {
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const { data } = useQuery(QUERY, { onCompleted: (result) => setSelectedCategories(result.categories) });
+
+  const handleOnChange = (category) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter((c) => c !== category));
+    } else {
+      setSelectedCategories([...selectedCategories, category]);
+    }
+  };
 
   return (
-    <ul>
-      {data && data.categories.map((category) => (<li>{category.emoji}{category.name}</li>))}
-    </ul>
+    <div>
+      <ul>
+        {data && data.categories.map((category) => (
+        <li key={category.id}>
+          {category.emoji}{category.name}<input type="checkbox" checked={selectedCategories.includes(category)} onChange={() => handleOnChange(category)}/>
+        </li>))}
+      </ul>
+      <button onClick={() => onCategoriesSelected(selectedCategories)}>Confirm</button>
+    </div>
   );
 }
 

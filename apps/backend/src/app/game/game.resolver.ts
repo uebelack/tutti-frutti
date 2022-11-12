@@ -17,10 +17,10 @@ export class GameResolver {
   @UseGuards(JwtAuthGuard)
   @Mutation(() => Game)
   createGame(
-  @Args('createWordInput') createWordInput: CreateGameInput,
+  @Args('createGameInput') createGameInput: CreateGameInput,
     @Context() context: GraphQLContext,
   ) {
-    return this.wordsService.startGame(context.req.user.sub, createWordInput);
+    return this.wordsService.startGame(context.req.user.sub, createGameInput);
   }
 
   @UseGuards(JwtAuthGuard)

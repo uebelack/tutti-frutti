@@ -21,11 +21,13 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>Tutti Frutti</title>
         </Head>
-        <main className="app">
-          <Authentication>
-            <Component {...pageProps} />
-          </Authentication>
-        </main>
+        <div className="flex justify-center w-full mt-10">
+          <div className="flex w-96 red">
+            <Authentication>
+              <Component {...pageProps} />
+            </Authentication>
+          </div>
+        </div>
       </SecureApolloProvider>
     </Auth0Provider>
   );
