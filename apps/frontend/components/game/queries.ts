@@ -13,7 +13,7 @@ export const CATEGORIES = gql`
 
 export const CREATE_GAME = gql`
   mutation CreateGame($createGameInput: CreateGameInput!) {
-    createGame(createWordInput: $createGameInput) {
+    createGame(createGameInput: $createGameInput) {
       id
       categories {
         id

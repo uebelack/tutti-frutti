@@ -1,15 +1,12 @@
 import React from 'react';
-import RootLayout from '../../components/layout/RootLayout/RootLayout';
+import Game from '../../components/game/Game';
 
-function Game() {
+function Index() {
   return (
     <div className="w-3/4 md:w-1/2 max-w-[350px] mx-auto flex flex-col gap-16">
-      {/* {!data && <Categories onCategoriesSelected={handleOnCategoriesSelected}/>} */}
-
+        <Game />
     </div>
   );
 }
 
-Game.Layout = RootLayout;
-
-export default Game;
+export default Index;

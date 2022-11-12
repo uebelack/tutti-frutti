@@ -8,9 +8,13 @@ const CategoriesPicker = ({
 }: {
   onSelect(categories: string[]): void;
 }): JSX.Element => {
-  const { data } = useQuery(CATEGORIES);
-
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const { data } = useQuery(CATEGORIES, {
+    onCompleted: (d) => {
+      setSelectedCategories(d.categories.map((c) => c.id));
+    },
+  });
 
   const onToggleCategory = (
     event: React.ChangeEvent<HTMLInputElement>,
