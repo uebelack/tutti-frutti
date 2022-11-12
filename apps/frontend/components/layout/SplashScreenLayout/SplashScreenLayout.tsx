@@ -1,0 +1,75 @@
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { ReactNode, useEffect, useState } from 'react';
+import Logo from '../../../public/Logo.png';
+import BGDesktop from '../../../public/splash-bg-desktop.png';
+import BGMobile from '../../../public/splash-bg-mobile.png';
+
+/* eslint-disable-next-line */
+export interface SplashScreenLayoutProps {
+  children: ReactNode | ReactNode[];
+}
+
+export function SplashScreenLayout({ children }: SplashScreenLayoutProps) {
+  const [showLogo, setShowLogo] = useState(false);
+
+  useEffect(() => {
+    document.querySelector('.app').classList.add('text-white');
+
+    setShowLogo(true);
+
+    return () => {
+      document.querySelector('.app').classList.remove('text-white');
+      setShowLogo(false);
+    };
+  }, []);
+
+  return (
+    <div className="h-screen">
+      <Image
+        src={BGDesktop}
+        alt="bg"
+        priority
+        placeholder="blur"
+        quality={100}
+        className="w-full h-full object-cover fixed inset-0 -z-50 hidden lg:block"
+      />
+      <Image
+        src={BGMobile}
+        alt="bg"
+        priority
+        placeholder="blur"
+        quality={100}
+        className="w-full h-full object-cover fixed inset-0 -z-50 lg:hidden"
+      />
+      <div className="relative container mx-auto h-full grid place-items-center">
+        <div className="w-full text-center flex flex-col gap-24">
+          {showLogo && (
+            <motion.div
+              initial={{ opacity: 0, y: '100%' }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: 0.75,
+                delay: 0.1,
+                ease: [0.61, -0.03, 0.35, 1.76],
+              }}
+            >
+              <Image
+                src={Logo}
+                alt="Tutti Frutti Logo"
+                priority
+                placeholder="blur"
+                quality={100}
+                className="w-3/4 md:w-1/2 max-w-[350px] mx-auto"
+              />
+            </motion.div>
+          )}
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default SplashScreenLayout;

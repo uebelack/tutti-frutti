@@ -1,12 +1,9 @@
-/* eslint-disable-next-line */
-export interface LoginProps {}
+import SplashScreenLayout from 'apps/frontend/components/layout/SplashScreenLayout/SplashScreenLayout';
 
-export function Login(props: LoginProps) {
-  return (
-    <div>
-      <h1>Welcome to Login!</h1>
-    </div>
-  );
-}
+export const Login = () => {
+  return <button>Login</button>;
+};
+
+Login.Layout = SplashScreenLayout;
 
 export default Login;

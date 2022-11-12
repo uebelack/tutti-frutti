@@ -4,6 +4,7 @@ import Image from 'next/image';
 import LogoutButton from '../components/LogoutButton';
 import Categories from '../components/Categories';
 import Leaderboard from '../components/Leaderboard';
+import SplashScreenLayout from '../components/layout/SplashScreenLayout/SplashScreenLayout';
 
 const QUERY = gql`
   query {
@@ -13,7 +14,7 @@ const QUERY = gql`
   }
 `;
 
-function Index() {
+const Home = () => {
   const { data } = useQuery(QUERY);
   const { user } = useAuth0();
 
@@ -27,6 +28,8 @@ function Index() {
       <p>2022 copyright T² - {data?.app?.serverTime}</p>
     </div>
   );
-}
+};
 
-export default Index;
+Home.Layout = SplashScreenLayout;
+
+export default Home;

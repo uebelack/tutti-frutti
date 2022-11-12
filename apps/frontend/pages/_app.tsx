@@ -1,14 +1,23 @@
-import { AppProps } from 'next/app';
 import { Auth0Provider } from '@auth0/auth0-react';
-
+import { AnimatePresence } from 'framer-motion';
+import { AppProps } from 'next/app';
 import Head from 'next/head';
-import SecureApolloProvider from '../components/providers/SecureApolloProvider';
+import { ElementType } from 'react';
+
 import Authentication from '../components/providers/AuthenticationCheckProvider';
+import RootLayoutProvider from '../components/providers/RootLayoutProvider';
+import SecureApolloProvider from '../components/providers/SecureApolloProvider';
 
 import './styles.css';
-import RootLayout from '../components/layout/RootLayout/RootLayout';
 
-function CustomApp({ Component, pageProps }: AppProps) {
+function CustomApp({
+  Component,
+  pageProps,
+}: AppProps & {
+  Component: { Layout?: ElementType };
+}) {
+  const ComponentLayout = Component.Layout;
+
   return (
     <Auth0Provider
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
@@ -24,9 +33,17 @@ function CustomApp({ Component, pageProps }: AppProps) {
         </Head>
         <main className="app backdrop:bg-white">
           <Authentication>
-            <RootLayout>
-              <Component {...pageProps} />
-            </RootLayout>
+            <RootLayoutProvider>
+              <AnimatePresence mode="wait">
+                {ComponentLayout ? (
+                  <ComponentLayout {...pageProps}>
+                    <Component {...pageProps} />
+                  </ComponentLayout>
+                ) : (
+                  <Component {...pageProps} />
+                )}
+              </AnimatePresence>
+            </RootLayoutProvider>
           </Authentication>
         </main>
       </SecureApolloProvider>
