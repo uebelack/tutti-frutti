@@ -84,12 +84,14 @@ type LeaderboardEntry {
 
 type Mutation {
   answerRound(answerRoundInput: AnswerRoundInput!): Game!
-  createGame(createWordInput: CreateGameInput!): Game!
+  createGame(createGameInput: CreateGameInput!): Game!
+  skipRound(gameId: String!): Game!
   useFiftyFifty(fiftyFiftyInput: FiftyFiftyInput!): Game!
 }
 
 type Query {
   categories: [Category!]!
+  game(gameId: String!): Game!
   leaderboard: [LeaderboardEntry!]!
 }
 

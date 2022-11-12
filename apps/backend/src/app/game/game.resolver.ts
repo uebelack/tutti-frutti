@@ -1,5 +1,5 @@
 import {
-  Args, Context, Mutation, Resolver,
+  Args, Context, Mutation, Resolver, Query,
 } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GameService } from './game.service';
@@ -12,15 +12,15 @@ import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 
 @Resolver(() => Game)
 export class GameResolver {
-  constructor(private readonly wordsService: GameService) {}
+  constructor(private readonly gameService: GameService) {}
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => Game)
   createGame(
-  @Args('createWordInput') createWordInput: CreateGameInput,
+  @Args('createGameInput') createGameInput: CreateGameInput,
     @Context() context: GraphQLContext,
   ) {
-    return this.wordsService.startGame(context.req.user.sub, createWordInput);
+    return this.gameService.startGame(context.req.user.sub, createGameInput);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -29,7 +29,7 @@ export class GameResolver {
   @Args('answerRoundInput') answerRoundInput: AnswerRoundInput,
     @Context() context: GraphQLContext,
   ) {
-    return this.wordsService.answerRound(
+    return this.gameService.answerRound(
       context.req.user.sub,
       answerRoundInput,
     );
@@ -41,9 +41,27 @@ export class GameResolver {
   @Args('fiftyFiftyInput') fiftyFiftyInput: FiftyFiftyInput,
     @Context() context: GraphQLContext,
   ) {
-    return this.wordsService.useFiftyFifty(
+    return this.gameService.useFiftyFifty(
       context.req.user.sub,
       fiftyFiftyInput,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Game)
+  skipRound(
+  @Args('gameId') gameId: string,
+    @Context() context: GraphQLContext,
+  ) {
+    return this.gameService.skipRound(context.req.user.sub, gameId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Query(() => Game)
+  game(
+  @Args('gameId') gameId: string,
+    @Context() context: GraphQLContext,
+  ) {
+    return this.gameService.findGame(context.req.user.sub, gameId);
   }
 }
