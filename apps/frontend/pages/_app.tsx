@@ -8,7 +8,8 @@ import Authentication from '../components/providers/AuthenticationCheckProvider'
 import RootLayoutProvider from '../components/providers/RootLayoutProvider';
 import SecureApolloProvider from '../components/providers/SecureApolloProvider';
 
-import './styles.css';
+import '@szhsin/react-menu/dist/index.css';
+import '../styles/styles.css';
 
 function CustomApp({
   Component,

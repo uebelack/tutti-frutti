@@ -1,3 +1,3 @@
 export * from './lib/Button/Button';
-export * from './lib/Header/Header';
+export * from '../../../apps/frontend/components/layout/RootLayout/Header/Header';
 export * from './lib/IconButton/IconButton';
