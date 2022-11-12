@@ -8,6 +8,7 @@ import { Game } from '../entities/game.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GraphQLContext } from '../../types/graphQlContext';
 import { AnswerRoundInput } from './dto/answer-round.input';
+import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 
 @Resolver(() => Game)
 export class GameResolver {
@@ -31,6 +32,18 @@ export class GameResolver {
     return this.wordsService.answerRound(
       context.req.user.sub,
       answerRoundInput,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Game)
+  useFiftyFifty(
+  @Args('fiftyFiftyInput') fiftyFiftyInput: FiftyFiftyInput,
+    @Context() context: GraphQLContext,
+  ) {
+    return this.wordsService.useFiftyFifty(
+      context.req.user.sub,
+      fiftyFiftyInput,
     );
   }
 }

@@ -6,7 +6,7 @@ input AnswerRoundInput {
   """Game ID"""
   gameId: String!
 
-  """Category ID"""
+  """Word ID"""
   wordId: String!
 }
 
@@ -33,6 +33,14 @@ input CreateGameInput {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+input FiftyFiftyInput {
+  """Game ID"""
+  gameId: String!
+
+  """Word IDs of current game"""
+  wordIds: String!
+}
 
 type Game {
   """All categories selected in game"""
@@ -74,6 +82,7 @@ type LeaderboardEntry {
 type Mutation {
   answerRound(answerRoundInput: AnswerRoundInput!): Game!
   createGame(createWordInput: CreateGameInput!): Game!
+  useFiftyFifty(fiftyFiftyInput: FiftyFiftyInput!): Game!
 }
 
 type Query {

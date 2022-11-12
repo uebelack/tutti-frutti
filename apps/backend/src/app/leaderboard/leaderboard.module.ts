@@ -5,5 +5,6 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
   providers: [LeaderboardService, LeaderboardResolver, PrismaService],
+  exports: [LeaderboardService],
 })
 export class LeaderboardModule {}

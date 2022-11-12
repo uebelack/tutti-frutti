@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { sample, shuffle } from 'lodash';
 import { pick } from 'next/dist/lib/pick';
 import { PrismaService } from '../prisma/prisma.service';
@@ -6,6 +6,8 @@ import { CreateGameInput } from './dto/create-game.input';
 import { Game } from '../entities/game.entity';
 import { Word } from '../entities/word.entity';
 import { AnswerRoundInput } from './dto/answer-round.input';
+import { FiftyFiftyInput } from './dto/fifty-fifty.input';
+import { LeaderboardService } from '../leaderboard/leaderboard.service';
 
 @Injectable()
 export class GameService {
@@ -15,7 +17,11 @@ export class GameService {
 
   private readonly INCORRECT_ANSWER_POINTS = -20;
 
-  constructor(private readonly prismaService: PrismaService) {}
+  private readonly FIFTY_FIFTY_DEFAULT = 1;
+
+  private readonly FIFTY_FIFTY_TOP = 2;
+
+  constructor(private readonly prismaService: PrismaService, private leaderboardService: LeaderboardService) {}
 
   async startGame(
     auth0Id: string,
@@ -80,6 +86,34 @@ export class GameService {
       ...round,
       round: updatedGame.words.length,
       previousRoundCorrect: correct,
+    };
+  }
+
+  async useFiftyFifty(auth0Id: string, fiftyFiftyInput: FiftyFiftyInput): Promise<Game> {
+    const game = await this.findGame(auth0Id, fiftyFiftyInput.gameId);
+    const isUserInLeaderboard = await this.leaderboardService.isUserInLeaderboard(auth0Id);
+    const maxFiftyFifty = isUserInLeaderboard ? this.FIFTY_FIFTY_TOP : this.FIFTY_FIFTY_DEFAULT;
+
+    if (game.fiftyFiftyUses >= maxFiftyFifty) {
+      throw new ConflictException('No more lifelines available');
+    }
+
+    const currentCorrectWord = game.words[game.words.length - 1];
+
+    // IMP CACHE for performance?
+    const currentCategory = await this.prismaService.category.findFirst({
+      where: {
+        id: currentCorrectWord.categoryId,
+      },
+    });
+
+    const incorrectWordsToShow = shuffle(fiftyFiftyInput.wordIds.filter((id) => id !== currentCorrectWord.id)).slice(0, this.WORDS_PER_ROUND / 2);
+
+    return {
+      ...game,
+      words: game.words.map((word) => ({ ...word, fiftyFiftyWrong: incorrectWordsToShow.indexOf(word.id) !== -1 })),
+      categoryName: currentCategory.name,
+      round: game.words.length,
     };
   }
 
