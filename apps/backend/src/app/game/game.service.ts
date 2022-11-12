@@ -3,8 +3,8 @@ import { sample, shuffle } from 'lodash';
 import { pick } from 'next/dist/lib/pick';
 import { PrismaService } from '../prisma.service';
 import { CreateGameInput } from './dto/create-game.input';
-import { Game } from './entities/game.entity';
-import { Word } from './entities/word.entity';
+import { Game } from '../entities/game.entity';
+import { Word } from '../entities/word.entity';
 import { AnswerRoundInput } from './dto/answer-round.input';
 
 @Injectable()
