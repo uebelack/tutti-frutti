@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { sample, shuffle } from 'lodash';
 import { pick } from 'next/dist/lib/pick';
 import { PrismaService } from '../prisma.service';
@@ -10,6 +14,8 @@ import { AnswerRoundInput } from './dto/answer-round.input';
 @Injectable()
 export class GameService {
   private readonly WORDS_PER_ROUND = 4;
+
+  private readonly TIME_LIMIT_SEC = 60;
 
   private readonly CORRECT_ANSWER_POINTS = 10;
 
@@ -52,6 +58,11 @@ export class GameService {
     answerRoundInput: AnswerRoundInput,
   ): Promise<Game> {
     const game = await this.findGame(auth0Id, answerRoundInput.gameId);
+
+    const timedOut = game.createdAt.getTime() - Date.now() > this.TIME_LIMIT_SEC * 1e3;
+    if (timedOut) {
+      throw new ConflictException('Time is up');
+    }
 
     const lastWord = game.words[game.words.length - 1];
     const correct = lastWord.id === answerRoundInput.wordId;
