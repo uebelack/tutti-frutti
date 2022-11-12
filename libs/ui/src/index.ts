@@ -1,1 +1,2 @@
-export * from './lib/Switch/Switch';
+export * from './lib/Header/Header';
+export * from './lib/IconButton/IconButton';

@@ -2,10 +2,11 @@ import { AppProps } from 'next/app';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 import Head from 'next/head';
-import SecureApolloProvider from '../components/SecureApolloProvider';
-import Authentication from '../components/AuthenticationCheckProvider';
+import SecureApolloProvider from '../components/providers/SecureApolloProvider';
+import Authentication from '../components/providers/AuthenticationCheckProvider';
 
 import './styles.css';
+import RootLayout from '../components/layout/RootLayout/RootLayout';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
@@ -21,9 +22,11 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>Tutti Frutti</title>
         </Head>
-        <main className="app">
+        <main className="app backdrop:bg-white">
           <Authentication>
-            <Component {...pageProps} />
+            <RootLayout>
+              <Component {...pageProps} />
+            </RootLayout>
           </Authentication>
         </main>
       </SecureApolloProvider>
