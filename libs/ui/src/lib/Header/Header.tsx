@@ -30,7 +30,7 @@ export function Header(props: HeaderProps) {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 w-full">
+    <header className="fixed top-0 left-0 w-full z-50">
       <div className="container mx-auto p-8 flex items-center gap-8">
         <IconButton className="w-8">
           <MenuIcon className="w-2/3" />

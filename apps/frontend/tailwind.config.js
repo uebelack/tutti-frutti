@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        blue: '#204DCC',
+        blue: { DEFAULT: '#204DCC', dark: '#1F4BC6' },
         primary: {
           10: '#21005D',
           20: '#381E72',
@@ -174,6 +174,9 @@ module.exports = {
             letterSpacing: '0em',
           },
         ],
+      },
+      borderRadius: {
+        '4xl': '100px',
       },
     },
   },

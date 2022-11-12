@@ -10,6 +10,8 @@ export interface SplashScreenLayoutProps {
   children: ReactNode | ReactNode[];
 }
 
+const AnimatedImage = motion(Image);
+
 export function SplashScreenLayout({ children }: SplashScreenLayoutProps) {
   const [showLogo, setShowLogo] = useState(false);
 
@@ -43,29 +45,39 @@ export function SplashScreenLayout({ children }: SplashScreenLayoutProps) {
         className="w-full h-full object-cover fixed inset-0 -z-50 lg:hidden"
       />
       <div className="relative container mx-auto h-full grid place-items-center">
-        <div className="w-full text-center flex flex-col gap-24">
+        <div className="w-full text-center flex flex-col items-center gap-24">
           {showLogo && (
-            <motion.div
-              initial={{ opacity: 0, y: '100%' }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{
-                duration: 0.75,
-                delay: 0.1,
-                ease: [0.61, -0.03, 0.35, 1.76],
-              }}
-            >
-              <Image
-                src={Logo}
-                alt="Tutti Frutti Logo"
-                priority
-                placeholder="blur"
-                quality={100}
-                className="w-3/4 md:w-1/2 max-w-[350px] mx-auto"
-              />
-            </motion.div>
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: '100%' }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  duration: 0.75,
+                  delay: 0.2,
+                  ease: [0.61, -0.03, 0.35, 1.76],
+                }}
+                className="w-full"
+              >
+                <Image
+                  src={Logo}
+                  alt="Tutti Frutti Logo"
+                  priority
+                  placeholder="blur"
+                  quality={100}
+                  className="w-3/5 md:w-1/2 max-w-[350px] mx-auto"
+                />
+              </motion.div>
+              <motion.div
+                className="w-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.85, duration: 0.2 }}
+              >
+                {children}
+              </motion.div>
+            </>
           )}
-          {children}
         </div>
       </div>
     </div>
