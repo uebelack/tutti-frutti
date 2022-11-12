@@ -15,7 +15,12 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "rules": {
+        "object-curly-newline": "off",
+        "@typescript-eslint/comma-dangle": "off",
+        "implicit-arrow-linebreak": "off",
+        "@typescript-eslint/indent": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

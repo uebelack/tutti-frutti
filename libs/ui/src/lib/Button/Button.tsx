@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React from 'react';
+import React, { ElementType, forwardRef } from 'react';
 import s from './Button.module.css';
 
 export interface ButtonProps
@@ -12,20 +12,35 @@ export interface ButtonProps
    * @default 'default'
    */
   shape?: 'rounded' | 'default' | 'pill';
+  /**
+   * @default 'button'
+   */
+  Component?: ElementType;
 }
 
-export function Button({
-  color = 'blue',
-  shape = 'default',
-  className,
-  children,
-  ...rest
-}: ButtonProps) {
-  return (
-    <button className={cn(s.root, s[color], s[shape], className)} {...rest}>
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      color = 'blue',
+      shape = 'default',
+      className,
+      Component = 'button',
+      children,
+      ...rest
+    },
+    ref,
+  ) => (
+    <Component
+      role="button"
+      className={cn(s.root, s[color], s[shape], className)}
+      {...rest}
+      ref={ref}
+    >
       {children}
-    </button>
-  );
-}
+    </Component>
+  ),
+);
+
+Button.displayName = 'Button';
 
 export default Button;

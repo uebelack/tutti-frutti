@@ -37,6 +37,7 @@ module.exports = {
         },
         black: '#000000',
         white: '#ffffff',
+        'off-white': '#f4f4f6',
       },
       fontFamily: {
         sans: ['Roboto', ...defaultTheme.fontFamily.sans],
@@ -177,6 +178,14 @@ module.exports = {
       },
       borderRadius: {
         '4xl': '100px',
+      },
+      keyframes: {
+        'fade-in': { from: { opacity: 0, transform: 'scale(.95)' } },
+        'fade-out': { to: { opacity: 0, transform: 'scale(.95)' } },
+      },
+      animation: {
+        'fade-in': 'fade-in 0.1s ease-out',
+        'fade-out': 'fade-out 0.15s ease-out forwards',
       },
     },
   },

@@ -8,7 +8,7 @@ export const Login = () => {
   return (
     <Button
       color="white"
-      className="w-3/4 md:w-1/2 max-w-[350px] text-title-lg"
+      className="w-3/4 md:w-1/2 max-w-[350px] text-title-lg hover:!bg-white hover:!bg-opacity-80"
       onClick={loginWithRedirect}
     >
       Login
