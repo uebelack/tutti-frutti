@@ -6,7 +6,11 @@ import Categories from '../components/Categories';
 import Leaderboard from '../components/Leaderboard';
 
 const QUERY = gql`
-  query {app {serverTime}}
+  query {
+    app {
+      serverTime
+    }
+  }
 `;
 
 function Index() {
@@ -15,12 +19,12 @@ function Index() {
 
   return (
     <div className="container">
-    <h1>Hello {user.name}!</h1>
-    <Image src={user.picture} alt={user.name} width={100} height={100}/>
-    <Categories />
-    <Leaderboard />
-    <LogoutButton />
-    <p>2022 copyright T² - {data?.app?.serverTime}</p>
+      <h1>Hello {user.name}!</h1>
+      <Image src={user.picture} alt={user.name} width={100} height={100} />
+      <Categories />
+      <Leaderboard />
+      <LogoutButton />
+      <p>2022 copyright T² - {data?.app?.serverTime}</p>
     </div>
   );
 }
