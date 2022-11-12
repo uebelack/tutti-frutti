@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { sample, sampleSize, shuffle } from 'lodash';
+import { Errors } from '@toptal-hackathon-t2/types';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateGameInput } from './dto/create-game.input';
 import { Game } from '../entities/game.entity';
@@ -25,6 +26,8 @@ export class GameService {
   private readonly FIFTY_FIFTY_DEFAULT = 1;
 
   private readonly FIFTY_FIFTY_TOP = 2;
+
+  private readonly MAX_SKIP_ROUNDS = Infinity;
 
   constructor(
     private readonly prismaService: PrismaService,
@@ -66,11 +69,7 @@ export class GameService {
     answerRoundInput: AnswerRoundInput,
   ): Promise<Game> {
     const game = await this.findGame(auth0Id, answerRoundInput.gameId);
-
-    const timedOut = game.createdAt.getTime() - Date.now() > this.TIME_LIMIT_SEC * 1e3; // TODO probably not working
-    if (timedOut) {
-      throw new ConflictException('Time is up');
-    }
+    this.checkForTimeout(game);
 
     const isCorrect = game.lastWord?.id === answerRoundInput.wordId;
 
@@ -106,13 +105,15 @@ export class GameService {
     fiftyFiftyInput: FiftyFiftyInput,
   ): Promise<Game> {
     const game = await this.findGame(auth0Id, fiftyFiftyInput.gameId);
+    this.checkForTimeout(game);
+
     const isUserInLeaderboard = await this.leaderboardService.isUserInLeaderboard(auth0Id);
     const maxFiftyFifty = isUserInLeaderboard
       ? this.FIFTY_FIFTY_TOP
       : this.FIFTY_FIFTY_DEFAULT;
 
     if (game.fiftyFiftyUses >= maxFiftyFifty) {
-      throw new ConflictException('No more lifelines available');
+      throw new ConflictException(Errors.NO_MORE_50_50);
     }
 
     // IMP CACHE for performance?
@@ -146,6 +147,41 @@ export class GameService {
       })),
       round: game.words.length,
     };
+  }
+
+  async skipRound(auth0Id: string, gameId: string): Promise<Game> {
+    const game = await this.findGame(auth0Id, gameId);
+    this.checkForTimeout(game);
+
+    if (game.timesSkipped >= this.MAX_SKIP_ROUNDS) {
+      throw new ConflictException(Errors.NO_MORE_SKIPS);
+    }
+
+    await this.prismaService.game.update({
+      where: {
+        id: game.id,
+      },
+      data: {
+        timesSkipped: {
+          increment: 1,
+        },
+      },
+    });
+
+    const round = await this.getWordsAndCategoryForRound(auth0Id, game.id);
+
+    return {
+      ...game,
+      ...round,
+      round: game.words.length,
+    };
+  }
+
+  private checkForTimeout(game: { createdAt: Date }) {
+    const timeSinceStart = Date.now() - game.createdAt.getTime();
+    if (timeSinceStart > this.TIME_LIMIT_SEC * 1e3) {
+      throw new ConflictException(Errors.TIME_IS_UP);
+    }
   }
 
   private async getWordsAndCategoryForRound(
@@ -224,7 +260,7 @@ export class GameService {
     });
 
     if (!game) {
-      throw new NotFoundException('Game not found');
+      throw new NotFoundException(Errors.GAME_NOT_FOUND);
     }
 
     return game;

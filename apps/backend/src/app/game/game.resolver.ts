@@ -46,4 +46,13 @@ export class GameResolver {
       fiftyFiftyInput,
     );
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Game)
+  skipRound(
+  @Args('gameId') gameId: string,
+    @Context() context: GraphQLContext,
+  ) {
+    return this.wordsService.skipRound(context.req.user.sub, gameId);
+  }
 }
