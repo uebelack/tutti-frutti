@@ -1,7 +1,8 @@
 import cn from 'classnames';
-import { HTMLAttributes } from 'react';
+import React from 'react';
 
-export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * @default 'blue
    */

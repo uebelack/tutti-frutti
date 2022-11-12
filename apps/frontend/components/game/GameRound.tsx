@@ -1,3 +1,4 @@
+import { Button } from 'UI';
 import { Round } from './types';
 
 const GameRound = ({
@@ -9,13 +10,13 @@ const GameRound = ({
 }): JSX.Element => (
   <div>
     <h2>Round {round.round + 1}</h2>
-    <h3>Category: {round.categoryName}</h3>
     <p>Total points: {round.score}</p>
-    <div>
+    <h3>Category: {round.categoryName}</h3>
+    <div className="flex flex-col gap-4">
       {round.words.map((word) => (
-        <button key={word.id} onClick={() => onSelect(word.id)}>
+        <Button key={word.id} onClick={() => onSelect(word.id)}>
           {word.text}
-        </button>
+        </Button>
       ))}
     </div>
   </div>

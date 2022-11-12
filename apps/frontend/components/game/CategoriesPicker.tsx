@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useState } from 'react';
+import { Button } from 'UI';
 import { CATEGORIES } from './queries';
 
 const CategoriesPicker = ({
@@ -40,13 +41,13 @@ const CategoriesPicker = ({
           ))}
         </div>
       )}
-      <button
+      <Button
         type="button"
         onClick={() => onSelect(selectedCategories)}
         disabled={selectedCategories.length === 0}
       >
         Submit
-      </button>
+      </Button>
     </div>
   );
 };
