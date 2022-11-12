@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 
-import LogoutButton from '../../components/LogoutButton';
+import LogoutButton from '../../components/auth/LogoutButton';
 
 jest.mock('@auth0/auth0-react', () => ({ useAuth0: jest.fn() }));
 

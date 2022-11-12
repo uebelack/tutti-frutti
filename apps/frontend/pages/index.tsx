@@ -1,12 +1,12 @@
-import { useRouter } from 'next/router';
 import { Button } from 'UI';
 import SplashScreenLayout from '../components/layout/SplashScreenLayout/SplashScreenLayout';
+import Game from '../components/game/Game';
 
-const Home = () => {
-  const router = useRouter();
-  return (
+const Home = () => (
     <div className="w-3/4 md:w-1/2 max-w-[350px] mx-auto flex flex-col gap-16">
-      <Button color="white" className="text-title-lg" onClick={() => router.replace('/game')}>
+      <Game />
+
+      <Button color="white" className="text-title-lg">
         Quick Play
       </Button>
       <Button color="white" className="text-title-lg">
@@ -16,8 +16,7 @@ const Home = () => {
         Tutorial
       </Button>
     </div>
-  );
-};
+);
 
 Home.Layout = SplashScreenLayout;
 
