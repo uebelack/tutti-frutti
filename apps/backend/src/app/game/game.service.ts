@@ -175,7 +175,7 @@ export class GameService {
     const allIncorrectWords = await this.prismaService.word.findMany({
       where: {
         categoryId: {
-          notIn: game.categories.map((c) => c.id),
+          not: correctWord.category.id,
         },
       },
     });
