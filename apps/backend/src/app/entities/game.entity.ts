@@ -26,8 +26,8 @@ export class Game {
   @Field(() => Int, { description: 'Current round words' })
     words: Word[];
 
-  @Field(() => Int, { description: 'Current round words' })
-    lifelineWrongWords: Word[];
+  // @Field(() => Int, { description: 'Current round words' })
+  //   lifelineWrongWords: Word[];
 
   @Field(() => Int, { description: 'Current round number' })
     round: number;
