@@ -50,7 +50,9 @@ describe('GameService', () => {
 
   it('should return game with 50% of words marked as wrong and update game fiftyFiftyUses', async () => {
     prisma.game.findFirst.mockResolvedValueOnce(
-      { id: 'abc', fiftyFiftyUses: 0, words: [{ id: 'c' }] },
+      {
+        id: 'abc', fiftyFiftyUses: 0, words: [{ id: 'c' }], lastWord: { id: 'c' },
+      },
     );
     prisma.category.findFirst.mockResolvedValueOnce({ name: 'Test Category' });
 

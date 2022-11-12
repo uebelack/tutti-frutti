@@ -16,14 +16,11 @@ const QUERY = gql`
 
 function Leaderboard() {
   const { data } = useQuery(QUERY);
-
-  console.log(data);
-
   return (
     <ul>
       {data
         && data.leaderboard.map((entry) => (
-          <li>
+          <li key={entry.user.id}>
             {entry.place}
             <Image
               src={entry.user.picture}

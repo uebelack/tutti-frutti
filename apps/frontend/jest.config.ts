@@ -8,4 +8,7 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/apps/frontend',
+  transformIgnorePatterns: [
+    "<rootDir>/node_modules/(?!screenfull/.*)"
+  ],
 };
