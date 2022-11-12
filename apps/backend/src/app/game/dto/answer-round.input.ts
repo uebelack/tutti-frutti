@@ -5,6 +5,6 @@ export class AnswerRoundInput {
   @Field(() => String, { description: 'Game ID' })
     gameId: string;
 
-  @Field(() => String, { description: 'Category ID' })
+  @Field(() => String, { description: 'Word ID' })
     wordId: string;
 }

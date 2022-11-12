@@ -38,4 +38,27 @@ export class LeaderboardService {
       score: parseInt(row.score.toString(), 10),
     }));
   }
+
+  async isUserInLeaderboard(auth0: string): Promise<boolean> {
+    const result = await this.prisma.$queryRaw`
+    SELECT 1 FROM (
+      SELECT 
+        u.id,
+        u.auth0,
+        sum(g.score) as score
+      FROM 
+        "User" AS u,
+        "Game" AS g 
+      WHERE
+        u.id=g."userId"
+      GROUP BY
+        u.id
+      ORDER BY score DESC
+      LIMIT 10
+    ) AS l
+    WHERE l.auth0 = ${auth0}
+    ` as [];
+
+    return result.length > 0;
+  }
 }

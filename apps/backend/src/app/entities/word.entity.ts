@@ -7,4 +7,7 @@ export class Word {
 
   @Field(() => String, { description: 'Word Text' })
     text: string;
+
+  @Field(() => String, { description: 'Word Text' })
+    fiftyFiftyWrong?: boolean;
 }
