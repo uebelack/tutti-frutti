@@ -2,9 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""app"""
-type App {
-  serverTime: DateTime!
+input AnswerRoundInput {
+  """Game ID"""
+  gameId: String!
+
+  """Category ID"""
+  wordId: String!
 }
 
 type Category {
@@ -57,10 +60,34 @@ type Game {
   words: Int!
 }
 
+type LeaderboardEntry {
+  """Place"""
+  place: Float!
+
+  """Score"""
+  score: Float!
+
+  """User"""
+  user: User!
+}
+
 type Mutation {
+  answerRound(answerRoundInput: AnswerRoundInput!): Game!
   createGame(createWordInput: CreateGameInput!): Game!
 }
 
 type Query {
-  app: App!
+  categories: [Category!]!
+  leaderboard: [LeaderboardEntry!]!
+}
+
+type User {
+  """User ID"""
+  id: String!
+
+  """User Name"""
+  name: String!
+
+  """Url to the users picture"""
+  picture: String!
 }

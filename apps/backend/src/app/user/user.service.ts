@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { catchError, firstValueFrom } from 'rxjs';
 import { User } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
-import { PrismaService } from './prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 type Auth0User = {
   name: string
