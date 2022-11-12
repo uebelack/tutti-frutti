@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@toptal-hackathon-t2/types": ["libs/types/src/index.ts"],
       "UI": ["libs/ui/src/index.ts"],
       "icons": ["libs/icons/src/index.ts"]
     }
