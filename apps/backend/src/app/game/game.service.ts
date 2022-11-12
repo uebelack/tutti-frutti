@@ -11,6 +11,7 @@ import { Word } from '../entities/word.entity';
 import { AnswerRoundInput } from './dto/answer-round.input';
 import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 import { LeaderboardService } from '../leaderboard/leaderboard.service';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class GameService {
@@ -29,6 +30,7 @@ export class GameService {
   constructor(
     private readonly prismaService: PrismaService,
     private leaderboardService: LeaderboardService,
+    private categoryService: CategoryService,
   ) {}
 
   async startGame(
@@ -157,28 +159,35 @@ export class GameService {
     }> {
     const game = await this.findGame(auth0Id, gameId);
 
-    const correctWords = await this.prismaService.word.findMany({
-      where: {
-        id: {
-          notIn: game.words.map((w) => w.id),
-        },
-        categoryId: {
-          in: game.categories.map((c) => c.id),
-        },
-      },
-      include: {
-        category: true,
-      },
-    });
-    const correctWord = sample(correctWords); // IMP move to SQL for performance
+    const gameCategoryIds = game.categories.map((c) => c.id);
+    const nextCategory = sample((await this.categoryService.findAll()).filter((c) => gameCategoryIds.includes(c.id)));
+
+    const correctWord = (await this.prismaService.$queryRaw`
+      SELECT
+        w.id,
+        w.text
+      FROM
+        "Word" as w
+      WHERE
+        "categoryId"=${nextCategory.id}
+        AND id not in (SELECT "B" FROM "_GameToWord" WHERE "A"=${gameId})
+      ORDER BY random() limit 1;
+    ` as { id: string; text: string; }[])[0];
+
+    const character = correctWord.text.charAt(0);
 
     const allIncorrectWords = await this.prismaService.word.findMany({
       where: {
         categoryId: {
-          not: correctWord.category.id,
+          not: nextCategory.id,
+        },
+        text: {
+          startsWith: character,
+          mode: 'insensitive',
         },
       },
     });
+
     const incorrectWords = sampleSize(
       allIncorrectWords,
       this.WORDS_PER_ROUND - 1,
@@ -203,7 +212,7 @@ export class GameService {
     });
 
     return {
-      categoryName: correctWord.category.name,
+      categoryName: nextCategory.name,
       words: shuffle([correctWord, ...incorrectWords]),
     };
   }

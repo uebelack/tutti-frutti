@@ -3,21 +3,24 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GameService } from './game.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { LeaderboardService } from '../leaderboard/leaderboard.service';
+import { CategoryService } from '../category/category.service';
 
 describe('GameService', () => {
   let service: GameService;
+  let categoryService: {};
   let prisma: { game: { findFirst: jest.Mock, update: jest.Mock }, category: { findFirst: jest.Mock } };
   let leaderboardService: { isUserInLeaderboard: jest.Mock };
 
   beforeEach(async () => {
     prisma = { game: { findFirst: jest.fn(), update: jest.fn() }, category: { findFirst: jest.fn() } };
     leaderboardService = { isUserInLeaderboard: jest.fn() };
-
+    categoryService = {};
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         GameService,
         { provide: PrismaService, useValue: prisma },
         { provide: LeaderboardService, useValue: leaderboardService },
+        { provide: CategoryService, useValue: categoryService },
       ],
     }).compile();
 
