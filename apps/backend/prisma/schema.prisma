@@ -27,8 +27,7 @@ model Category {
   name        String   @unique
   description String?
   words       Word[]
-  Game        Game?    @relation(fields: [gameId], references: [id])
-  gameId      String?
+  games       Game[]
 }
 
 model Word {

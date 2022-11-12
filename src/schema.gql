@@ -57,7 +57,7 @@ type Game {
   round: Int!
 
   """Current round words"""
-  words: Int!
+  words: Word!
 }
 
 type LeaderboardEntry {
@@ -90,4 +90,12 @@ type User {
 
   """Url to the users picture"""
   picture: String!
+}
+
+type Word {
+  """Word ID"""
+  id: String!
+
+  """Word Text"""
+  text: String!
 }
