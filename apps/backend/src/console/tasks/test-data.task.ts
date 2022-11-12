@@ -2,7 +2,7 @@
 import { Console, Command, createSpinner } from 'nestjs-console';
 import { faker } from '@faker-js/faker';
 import { v4 as uuidv4 } from 'uuid';
-import { PrismaService } from '../../app/prisma.service';
+import { PrismaService } from '../../app/prisma/prisma.service';
 
 @Console()
 export class TestDataTask {

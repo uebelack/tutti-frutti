@@ -23,8 +23,11 @@ export class Game {
   })
     categoryName: string;
 
-  @Field(() => Int, { description: 'Current round words' })
+  @Field(() => [Word], { description: 'Current round words' })
     words: Word[];
+
+  @Field(() => Int, { description: 'Current score' })
+    score: number;
 
   @Field(() => Int, { description: 'Current round number' })
     round: number;

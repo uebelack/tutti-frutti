@@ -6,7 +6,7 @@ import {
 } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Category } from '../game/entities/category.entity';
+import { Category } from '../entities/category.entity';
 import { CategoryService } from './category.service';
 
 @Resolver(() => Category)

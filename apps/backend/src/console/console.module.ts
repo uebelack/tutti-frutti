@@ -4,7 +4,7 @@ import { ConsoleModule as NestConsoleModule } from 'nestjs-console';
 import { HttpModule } from '@nestjs/axios';
 import { ImportTask } from './tasks/import.task';
 import { TestDataTask } from './tasks/test-data.task';
-import { PrismaService } from '../app/prisma.service';
+import { PrismaService } from '../app/prisma/prisma.service';
 
 @Module({
   imports: [

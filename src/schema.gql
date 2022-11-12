@@ -6,13 +6,8 @@ input AnswerRoundInput {
   """Game ID"""
   gameId: String!
 
-  """Category ID"""
+  """Word ID"""
   wordId: String!
-}
-
-"""app"""
-type App {
-  serverTime: DateTime!
 }
 
 type Category {
@@ -39,6 +34,14 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input FiftyFiftyInput {
+  """Game ID"""
+  gameId: String!
+
+  """Word IDs of current game"""
+  words: String!
+}
+
 type Game {
   """All categories selected in game"""
   categories: [Category!]!
@@ -61,8 +64,11 @@ type Game {
   """Current round number"""
   round: Int!
 
+  """Current score"""
+  score: Int!
+
   """Current round words"""
-  words: Int!
+  words: [Word!]!
 }
 
 type LeaderboardEntry {
@@ -79,10 +85,10 @@ type LeaderboardEntry {
 type Mutation {
   answerRound(answerRoundInput: AnswerRoundInput!): Game!
   createGame(createWordInput: CreateGameInput!): Game!
+  useFiftyFifty(fiftyFiftyInput: FiftyFiftyInput!): Game!
 }
 
 type Query {
-  app: App!
   categories: [Category!]!
   leaderboard: [LeaderboardEntry!]!
 }
@@ -96,4 +102,15 @@ type User {
 
   """Url to the users picture"""
   picture: String!
+}
+
+type Word {
+  """Word Text"""
+  fiftyFiftyWrong: String!
+
+  """Word ID"""
+  id: String!
+
+  """Word Text"""
+  text: String!
 }

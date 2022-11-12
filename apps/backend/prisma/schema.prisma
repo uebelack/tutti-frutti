@@ -27,18 +27,18 @@ model Category {
   name        String   @unique
   description String?
   words       Word[]
-  Game        Game?    @relation(fields: [gameId], references: [id])
-  gameId      String?
+  games       Game[]
 }
 
 model Word {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  category   Category? @relation(fields: [categoryId], references: [id])
-  text       String    @unique
-  categoryId String?
-  games      Game[]
+  id                String    @id @default(cuid())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  category          Category? @relation(fields: [categoryId], references: [id])
+  text              String    @unique
+  categoryId        String?
+  games             Game[]
+  gamesWithLastWord Game[]    @relation(name: "LastWord")
 }
 
 model Game {
@@ -49,9 +49,11 @@ model Game {
   categories     Category[]
   user           User       @relation(fields: [userId], references: [id])
   words          Word[]
+  lastWord       Word?       @relation(name: "LastWord", fields: [wordId], references: [id])
   score          Int        @default(0)
   fiftyFiftyUses Int        @default(0)
   userId         String
+  wordId         String?
 }
 
 enum Role {

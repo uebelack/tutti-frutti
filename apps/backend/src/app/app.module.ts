@@ -6,14 +6,12 @@ import { join } from 'path';
 import { PassportModule } from '@nestjs/passport';
 import { HttpModule } from '@nestjs/axios';
 
-import { AppResolver } from './app.resolver';
-import { AppService } from './app.service';
-import { JwtStrategy } from './auth/jwt.strategy';
-import { PrismaService } from './prisma.service';
-import { UserService } from './user.service';
 import { GameModule } from './game/game.module';
 import { CategoryModule } from './category/category.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,7 +26,9 @@ import { LeaderboardModule } from './leaderboard/leaderboard.module';
     CategoryModule,
     GameModule,
     LeaderboardModule,
+    PrismaModule,
+    UserModule,
+    AuthModule,
   ],
-  providers: [AppService, AppResolver, PrismaService, JwtStrategy, UserService],
 })
 export class AppModule {}

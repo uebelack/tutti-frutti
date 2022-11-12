@@ -5,7 +5,7 @@ import { HttpService } from '@nestjs/axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import { Category } from '@prisma/client';
 import { parse } from 'papaparse';
-import { PrismaService } from '../../app/prisma.service';
+import { PrismaService } from '../../app/prisma/prisma.service';
 
 type ImportCategory = {
   name: string;

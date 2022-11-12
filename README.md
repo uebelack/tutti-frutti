@@ -22,6 +22,6 @@
 
 `yarn prisma:studio` - opens prisma studio
 
-### Data
+### Data
 
 `yarn dev:import` - imports categories and words from googlesheet
