@@ -20,6 +20,7 @@ export interface GameType {
   character: string;
   score: number;
   words: Word[];
+  timeLimit: number;
 }
 
 export interface GameResults {

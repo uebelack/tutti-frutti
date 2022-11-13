@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as prisma from '@prisma/client';
-import { maxBy, shuffle } from 'lodash';
+import { maxBy, shuffle, sortBy } from 'lodash';
 import { Errors } from '@toptal-hackathon-t2/types';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
@@ -362,7 +362,7 @@ export class GameService {
       categoryName: correctWord.category.name,
       categoryDescription: correctWord.category.description,
       character,
-      words: shuffle([correctWord, ...incorrectWords]), // TODO make alphabetical order
+      words: [correctWord, ...incorrectWords],
     };
   }
 
@@ -396,6 +396,7 @@ export class GameService {
     return {
       ...game,
       ...round,
+      words: sortBy(round.words, 'text'),
       round: game.rounds.length + 1,
       fiftyFiftyUsesLeft,
       timeLimit: this.config.timeLimitInSeconds,

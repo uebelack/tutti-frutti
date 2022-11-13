@@ -3,8 +3,8 @@ import useSound from 'use-sound';
 import { Errors } from '@toptal-hackathon-t2/types';
 import { pick } from 'next/dist/lib/pick';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
-import Countdown, { zeroPad } from 'react-countdown';
+import { useState } from 'react';
+import Countdown from 'react-countdown';
 import cn from 'classnames';
 import { ANSWER_ROUND } from '../../graphql/mutations/answer-round.mutation';
 import { CREATE_GAME } from '../../graphql/mutations/create-game.mutation';
@@ -23,11 +23,9 @@ const Game = (): JSX.Element => {
   const router = useRouter();
   const [round, setRound] = useState<GameType>();
   const [startTime, setStartTime] = useState(0);
-  const [currentTick, setCurrentTick] = useState(30);
+  const [barPercent, setBarPercent] = useState(100);
 
   const { setShowHeader } = useRootContext();
-
-  const barPercent = useMemo(() => (currentTick / 30) * 100, [currentTick]);
 
   const mutationsOptions = {
     onCompleted: (data) => {
@@ -123,21 +121,23 @@ const Game = (): JSX.Element => {
       <div className="bg-white text-title-lg fixed top-0 left-0 w-full text-black z-50">
         <div className="container mx-auto py-4 flex justify-between items-center">
           <Countdown
-            date={startTime + 30000}
-            renderer={({ seconds }) => (
-              <span>{zeroPad(seconds)} seconds left</span>
+            date={startTime + round.timeLimit * 1000}
+            intervalDelay={100}
+            precision={1}
+            renderer={({ total }) => (
+              <span>{(total / 1e3).toFixed(1)} seconds left</span>
             )}
-            onTick={({ seconds, completed }) => {
+            onTick={({ total, completed }) => {
               if (completed) {
                 setShowHeader(true);
                 router.push(`/results/${round.id}`);
               } else {
-                setCurrentTick(seconds);
+                setBarPercent(Math.round(total / round.timeLimit / 10));
               }
             }}
           />
           <div>Score {round.score}</div>
-          <div>Question {round.round + 1}</div>
+          <div>Question {round.round}</div>
           {/* <div>End game</div> */}
         </div>
         <span

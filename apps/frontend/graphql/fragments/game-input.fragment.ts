@@ -20,5 +20,6 @@ export const GAME_INPUT_FRAGMENT = gql`
       fiftyFiftyWrong
     }
     previousRoundCorrect
+    timeLimit
   }
 `;
