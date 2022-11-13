@@ -3,10 +3,11 @@ import useSound from 'use-sound';
 import { Errors } from '@toptal-hackathon-t2/types';
 import { pick } from 'next/dist/lib/pick';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import cn from 'classnames';
 import { ClockIcon, CloseIcon, CoinIcon, MessageIcon, VolumeIcon } from 'icons';
+import { motion, useAnimationControls } from 'framer-motion';
 import { ANSWER_ROUND } from '../../graphql/mutations/answer-round.mutation';
 import { CREATE_GAME } from '../../graphql/mutations/create-game.mutation';
 import { SKIP_ROUND } from '../../graphql/mutations/skip-round.mutation';
@@ -17,6 +18,38 @@ import { useRootContext } from '../providers/RootLayoutProvider';
 import CategoriesSelect from './CategoriesSelect';
 import GameRound from './GameRound';
 import s from './Game.module.css';
+
+const Score = ({ round }: { round: GameType }): JSX.Element => {
+  const controls = useAnimationControls();
+
+  useEffect(() => {
+    if (typeof round.previousRoundCorrect !== 'boolean') return;
+    (async () => {
+      controls.stop();
+      await controls.start({
+        scale: 2,
+        opacity: 0,
+        color: round.previousRoundCorrect ? 'green' : 'red',
+      });
+    })();
+  }, [controls, round]);
+
+  return (
+    <div className={cn('hidden lg:block', s.badge)}>
+      <CoinIcon />
+      <div className="relative">
+        <span className="relative z-10">{round.score} Points</span>
+        <motion.div
+          animate={controls}
+          initial={{ scale: 1, opacity: 1 }}
+          className="absolute inset-0 z-0"
+        >
+          {round.score} Points
+        </motion.div>
+      </div>
+    </div>
+  );
+};
 
 const Game = (): JSX.Element => {
   const [playSuccessSfx] = useSound('/sounds/success.mp3');
@@ -152,10 +185,7 @@ const Game = (): JSX.Element => {
               <span className="font-bold ml-1">{round.round}</span>
             </span>
           </div>
-          <div className={cn('hidden lg:block', s.badge)}>
-            <CoinIcon />
-            <span>{round.score} Points</span>
-          </div>
+          <Score round={round} />
           <div
             className={cn('cursor-pointer', s.badge)}
             onClick={() => setMute((m) => !m)}
