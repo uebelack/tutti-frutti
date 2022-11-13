@@ -9,6 +9,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateGameInput } from './dto/create-game.input';
 import { Game } from '../entities/game.entity';
 import { Word } from '../entities/word.entity';
+import { Category } from '../entities/category.entity';
+
 import { AnswerRoundInput } from './dto/answer-round.input';
 import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 import { LeaderboardService } from '../leaderboard/leaderboard.service';
@@ -18,7 +20,7 @@ import { CategoryService } from '../category/category.service';
 export class GameService {
   private readonly WORDS_PER_ROUND = 4;
 
-  private readonly TIME_LIMIT_SEC = 360;
+  private readonly TIME_LIMIT_SEC = 10;
 
   private readonly CORRECT_ANSWER_POINTS = 10;
 
@@ -188,21 +190,12 @@ export class GameService {
     }
   }
 
-  private async getWordsAndCategoryForRound(
-    auth0Id: string,
-    gameId: string,
-  ): Promise<{
-      categoryName: string;
-      words: Pick<Word, 'id' | 'text'>[];
-    }> {
-    const game = await this.findGame(auth0Id, gameId);
-
-    const gameCategoryIds = game.categories.map((c) => c.id);
+  private async findNextCategoryAndCorrectWord(gameId: string, gameCategoryIds: string[]): Promise<{ nextCategory: Category, correctWord: Word }> {
     const nextCategory = sample(
       (await this.categoryService.findAll()).filter((c) => gameCategoryIds.includes(c.id)),
     );
 
-    const correctWord = (
+    const correctWords = (
       (await this.prismaService.$queryRaw`
       SELECT
         w.id,
@@ -214,8 +207,25 @@ export class GameService {
         AND id not in (SELECT "B" FROM "_GameToWord" WHERE "A"=${gameId})
       ORDER BY random() limit 1;
     `) as { id: string; text: string }[]
-    )[0];
+    );
 
+    if (correctWords.length > 0) {
+      return { nextCategory, correctWord: correctWords[0] };
+    }
+
+    return this.findNextCategoryAndCorrectWord(gameId, gameCategoryIds);
+  }
+
+  private async getWordsAndCategoryForRound(
+    auth0Id: string,
+    gameId: string,
+  ): Promise<{
+      categoryName: string;
+      words: Pick<Word, 'id' | 'text'>[];
+    }> {
+    const game = await this.findGame(auth0Id, gameId);
+    const gameCategoryIds = game.categories.map((c) => c.id);
+    const { nextCategory, correctWord } = await this.findNextCategoryAndCorrectWord(gameId, gameCategoryIds);
     const character = correctWord.text.charAt(0);
 
     const allIncorrectWords = await this.prismaService.word.findMany({

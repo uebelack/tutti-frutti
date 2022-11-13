@@ -69,7 +69,10 @@ const Game = (): JSX.Element => {
         },
       },
     });
-    setRound(currentRound.data.answerRound);
+    // when time is app this did lead to an error
+    if (currentRound.data) {
+      setRound(currentRound.data.answerRound);
+    }
   };
 
   const onSkipRound = async () => {
