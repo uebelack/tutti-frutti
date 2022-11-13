@@ -1,12 +1,9 @@
 import React from 'react';
+import SplashScreenLayout from '../../components/layout/SplashScreenLayout/SplashScreenLayout';
 import Game from '../../components/game/Game';
 
-function Index() {
-  return (
-    <div>
-      <Game />
-    </div>
-  );
-}
+export const GamePage = () => <Game />;
 
-export default Index;
+GamePage.Layout = SplashScreenLayout;
+
+export default GamePage;

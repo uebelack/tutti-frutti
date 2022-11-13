@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Errors } from '@toptal-hackathon-t2/types';
 import { pick } from 'next/dist/lib/pick';
 import { useRouter } from 'next/router';
-import CategoriesPicker from './CategoriesPicker';
+import CategoriesSelect from './CategoriesSelect';
 import GameRound from './GameRound';
 import { AnswerRoundInput, CreateGameInput, GameType } from '../../types';
 import { ANSWER_ROUND } from '../../graphql/mutations/answer-round.mutation';
@@ -94,20 +94,15 @@ const Game = (): JSX.Element => {
     }
   };
 
-  return (
-    <div>
-      <h1>Game</h1>
-      {!round ? (
-        <CategoriesPicker onSelect={onSelectCategories} />
-      ) : (
-        <GameRound
-          round={round}
-          onSelect={onAnswerRound}
-          onSkip={onSkipRound}
-          onFiftyFifty={onFiftyFifty}
-        />
-      )}
-    </div>
+  return !round ? (
+    <CategoriesSelect onSelect={onSelectCategories} />
+  ) : (
+    <GameRound
+      round={round}
+      onSelect={onAnswerRound}
+      onSkip={onSkipRound}
+      onFiftyFifty={onFiftyFifty}
+    />
   );
 };
 

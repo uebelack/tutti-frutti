@@ -4,14 +4,14 @@ export interface Word {
   fiftyFiftyWrong?: boolean;
 }
 
-export interface Category {
+export interface GameCategory {
   id: string;
-  text: string;
+  name: string;
 }
 
 export interface GameType {
   id: string;
-  categories: Category[];
+  categories: GameCategory[];
   createdAt: string;
   fiftyFiftyUsesLeft: number;
   round: number;
