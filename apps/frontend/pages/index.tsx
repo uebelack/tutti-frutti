@@ -16,7 +16,10 @@ const Home = () => {
       <Button color="white" className="text-title-lg">
         Multiplayer
       </Button>
-      <Button color="white" className="text-title-lg">
+      <Button
+        color="white"
+        className="text-title-lg"
+        onClick={() => router.replace('/tutorial')}>
         Tutorial
       </Button>
     </div>

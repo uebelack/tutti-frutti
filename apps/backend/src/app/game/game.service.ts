@@ -153,6 +153,8 @@ export class GameService {
     return {
       ...game,
       categoryName: currentCategory.name,
+      categoryDescription: currentCategory.description,
+      character: currentCategory.name.charAt(0),
       words: fiftyFiftyInput.words.map((word) => ({
         ...word,
         fiftyFiftyWrong: incorrectWordIdsToShow.indexOf(word.id) !== -1,
