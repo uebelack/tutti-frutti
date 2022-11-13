@@ -305,7 +305,7 @@ export class GameService {
       LEFT JOIN "Category" as c
         ON w."categoryId" = c.id
       WHERE
-        "categoryId" <> '$1'
+        "categoryId" <> $1
         AND text ILIKE $2
       ORDER BY random() limit $3;
     `,
