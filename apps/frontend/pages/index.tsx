@@ -1,35 +1,42 @@
 import Link from 'next/link';
 import { Button } from 'UI';
+import useSound from 'use-sound';
 import SplashScreenLayout from '../components/layout/SplashScreenLayout/SplashScreenLayout';
 
-const Home = () => (
-  <div className="w-3/4 md:w-1/2 max-w-[350px] mx-auto flex flex-col gap-16">
-    <Button
-      color="white"
-      className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
-      Component={Link}
-      // @ts-ignore
-      href="/game"
-      // onClick={() => {
-      //   window.sessionStorage.setItem('mode', 'single');
-      // }}
-    >
-      Quick Play
-    </Button>
-    {/* <Button
-      color="white"
-      className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
-    >
-      Multiplayer
-    </Button> */}
-    <Button
-      color="white"
-      className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
-    >
-      Tutorial
-    </Button>
-  </div>
-);
+const Home = () => {
+  const [playConfirmSfx] = useSound('/sounds/confirm.mp3');
+  return (
+    <div className="w-3/4 md:w-1/2 max-w-[350px] mx-auto flex flex-col gap-16">
+      <Button
+        color="white"
+        className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
+        Component={Link}
+        // @ts-ignore
+        href="/game"
+        onClick={() => playConfirmSfx()}
+        // onClick={() => {
+        //   window.sessionStorage.setItem('mode', 'single');
+        // }}
+      >
+        Quick Play
+      </Button>
+      {/* <Button
+        color="white"
+        className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
+      >
+        Multiplayer
+      </Button> */}
+      <Button
+        color="white"
+        className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
+        Component={Link}
+        href="/tutorial"
+      >
+        Tutorial
+      </Button>
+    </div>
+  );
+};
 
 Home.Layout = SplashScreenLayout;
 

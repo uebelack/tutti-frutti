@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+import useSound from 'use-sound';
 import { Errors } from '@toptal-hackathon-t2/types';
 import { pick } from 'next/dist/lib/pick';
 import { useRouter } from 'next/router';
@@ -13,10 +14,21 @@ import { USE_FIFTY_FIFTY } from '../../graphql/mutations/use-fifty-fifty';
 import { FiftyFiftyInput } from '../../types/fifty-fifty-input';
 
 const Game = (): JSX.Element => {
+  const [playSuccessSfx] = useSound('/sounds/success.mp3');
+  const [playFailSfx] = useSound('/sounds/fail.mp3');
+
   const router = useRouter();
   const [round, setRound] = useState<GameType>();
 
   const mutationsOptions = {
+    onCompleted: (data) => {
+      console.log(data.answerRound);
+      if (data.answerRound.previousRoundCorrect) {
+        playSuccessSfx();
+      } else {
+        playFailSfx();
+      }
+    },
     onError: (error) => {
       if (error.message === Errors.TIME_IS_UP) {
         router.replace(`/result/${round.id}`);

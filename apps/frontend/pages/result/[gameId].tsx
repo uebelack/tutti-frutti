@@ -1,13 +1,19 @@
+import { useEffect } from 'react';
 import { Button, Loader } from 'UI';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { Errors } from '@toptal-hackathon-t2/types';
+import useSound from 'use-sound';
 import { GAME_RESULTS } from '../../graphql/queries/game-results';
 import { GameResults } from '../../types';
 
 const Result = () => {
   const router = useRouter();
+  const [playCongratulationSfx] = useSound('/sounds/congratulations.mp3');
+
+  useEffect(playCongratulationSfx, [playCongratulationSfx]);
+
   const { data, error, loading } = useQuery<{ gameResults: GameResults }>(
     GAME_RESULTS,
     {

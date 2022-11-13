@@ -16,7 +16,6 @@ const QUERY = gql`
 
 function Index() {
   const { data } = useQuery(QUERY);
-
   return (
     <ul>
       {data && data.leaderboard.map((entry) => (

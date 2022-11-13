@@ -3,6 +3,7 @@ import { CheckmarkIcon, CloseIcon } from 'icons';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Button, IconButton, Loader, Popup, Switch } from 'UI';
+import useSound from 'use-sound';
 import { Category } from '../../types';
 import { CATEGORIES } from '../../graphql/queries/categories.query';
 
@@ -11,6 +12,7 @@ export const CategoriesSelect = ({
 }: {
   onSelect(categories: string[]): void;
 }) => {
+  const [playConfirmSfx] = useSound('/sounds/confirm.mp3');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
@@ -29,6 +31,11 @@ export const CategoriesSelect = ({
     } else {
       setSelectedCategories(selectedCategories.filter((c) => c !== categoryId));
     }
+  };
+
+  const handleOnConfirm = () => {
+    playConfirmSfx();
+    onSelect(selectedCategories);
   };
 
   return loading ? (
@@ -80,7 +87,7 @@ export const CategoriesSelect = ({
           color="blue"
           shape="rounded"
           className="text-body-lg uppercase flex items-center gap-5"
-          onClick={() => onSelect(selectedCategories)}
+          onClick={handleOnConfirm}
           disabled={selectedCategories.length === 0}
         >
           Confirm
