@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { sample, sampleSize, shuffle } from 'lodash';
 import { Errors } from '@toptal-hackathon-t2/types';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateGameInput } from './dto/create-game.input';
 import { Game } from '../entities/game.entity';
@@ -16,28 +17,19 @@ import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 import { LeaderboardService } from '../leaderboard/leaderboard.service';
 import { CategoryService } from '../category/category.service';
 import { GameResults } from '../entities/game-results.entity';
+import { GameConfig } from '../config/game-config.type';
 
 @Injectable()
 export class GameService {
-  private readonly WORDS_PER_ROUND = 4;
-
-  private readonly TIME_LIMIT_SEC = 10;
-
-  private readonly CORRECT_ANSWER_POINTS = 10;
-
-  private readonly INCORRECT_ANSWER_POINTS = -20;
-
-  private readonly FIFTY_FIFTY_DEFAULT = 1;
-
-  private readonly FIFTY_FIFTY_TOP = 2;
-
-  private readonly MAX_SKIP_ROUNDS = Infinity;
-
+  private readonly config: GameConfig;
   constructor(
     private readonly prismaService: PrismaService,
     private leaderboardService: LeaderboardService,
     private categoryService: CategoryService,
-  ) {}
+    private configService: ConfigService,
+  ) {
+    this.config = configService.get('game');
+  }
 
   async startGame(
     auth0Id: string,
@@ -70,7 +62,7 @@ export class GameService {
         auth0Id,
         game.fiftyFiftyUses,
       ),
-      timeLimit: this.TIME_LIMIT_SEC,
+      timeLimit: this.config.timeLimitInSeconds,
     };
   }
 
@@ -90,8 +82,8 @@ export class GameService {
       data: {
         score: {
           increment: isCorrect
-            ? this.CORRECT_ANSWER_POINTS
-            : this.INCORRECT_ANSWER_POINTS,
+            ? this.config.correctAnswerPoints
+            : this.config.incorrectAnswerPoints,
         },
       },
       include: {
@@ -111,7 +103,7 @@ export class GameService {
         auth0Id,
         game.fiftyFiftyUses,
       ),
-      timeLimit: this.TIME_LIMIT_SEC,
+      timeLimit: this.config.timeLimitInSeconds,
     };
   }
 
@@ -137,7 +129,7 @@ export class GameService {
       fiftyFiftyInput.words
         .map((word) => word.id)
         .filter((id) => id !== game.lastWord.id),
-    ).slice(0, Math.floor(this.WORDS_PER_ROUND / 2));
+    ).slice(0, Math.floor(this.config.wordsPerRound / 2));
 
     await this.prismaService.game.update({
       where: {
@@ -164,7 +156,7 @@ export class GameService {
         auth0Id,
         game.fiftyFiftyUses,
       ),
-      timeLimit: this.TIME_LIMIT_SEC,
+      timeLimit: this.config.timeLimitInSeconds,
     };
   }
 
@@ -172,7 +164,7 @@ export class GameService {
     const game = await this.findGame(auth0Id, gameId);
     this.checkForTimeout(game);
 
-    if (game.timesSkipped >= this.MAX_SKIP_ROUNDS) {
+    if (game.timesSkipped >= this.config.maxSkipRounds) {
       throw new ConflictException(Errors.NO_MORE_SKIPS);
     }
 
@@ -197,7 +189,7 @@ export class GameService {
         auth0Id,
         game.fiftyFiftyUses,
       ),
-      timeLimit: this.TIME_LIMIT_SEC,
+      timeLimit: this.config.timeLimitInSeconds,
     };
   }
 
@@ -235,15 +227,15 @@ export class GameService {
   private async getFiftyFiftyUsesLeft(auth0Id: string, fiftyFiftyUses: number) {
     const isUserInLeaderboard = await this.leaderboardService.isUserInLeaderboard(auth0Id);
     const maxFiftyFifty = isUserInLeaderboard
-      ? this.FIFTY_FIFTY_TOP
-      : this.FIFTY_FIFTY_DEFAULT;
+      ? this.config.fiftyFiftyDefault
+      : this.config.fiftyFiftyTop;
 
     return maxFiftyFifty - fiftyFiftyUses;
   }
 
   private checkForTimeout(game: { createdAt: Date }) {
     const timeSinceStart = Date.now() - game.createdAt.getTime();
-    if (timeSinceStart > this.TIME_LIMIT_SEC * 1e3) {
+    if (timeSinceStart > this.config.timeLimitInSeconds * 1e3) {
       throw new ConflictException(Errors.TIME_IS_UP);
     }
   }
@@ -303,7 +295,7 @@ export class GameService {
 
     const incorrectWords = sampleSize(
       allIncorrectWords,
-      this.WORDS_PER_ROUND - 1,
+      this.config.wordsPerRound - 1,
     );
 
     await this.prismaService.game.update({
