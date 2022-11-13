@@ -4,18 +4,18 @@ import {
 import { UseGuards } from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameInput } from './dto/create-game.input';
-import { Game } from '../entities/game.entity';
+import { GameEntity } from '../entities/game.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GraphQLContext } from '../../types/graphQlContext';
 import { AnswerRoundInput } from './dto/answer-round.input';
 import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 
-@Resolver(() => Game)
+@Resolver(() => GameEntity)
 export class GameResolver {
   constructor(private readonly gameService: GameService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => Game)
+  @Mutation(() => GameEntity)
   createGame(
   @Args('createGameInput') createGameInput: CreateGameInput,
     @Context() context: GraphQLContext,
@@ -24,7 +24,7 @@ export class GameResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => Game)
+  @Mutation(() => GameEntity)
   answerRound(
   @Args('answerRoundInput') answerRoundInput: AnswerRoundInput,
     @Context() context: GraphQLContext,
@@ -33,7 +33,7 @@ export class GameResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => Game)
+  @Mutation(() => GameEntity)
   useFiftyFifty(
   @Args('fiftyFiftyInput') fiftyFiftyInput: FiftyFiftyInput,
     @Context() context: GraphQLContext,
@@ -45,7 +45,7 @@ export class GameResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => Game)
+  @Mutation(() => GameEntity)
   skipRound(
   @Args('gameId') gameId: string,
     @Context() context: GraphQLContext,
@@ -54,7 +54,7 @@ export class GameResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Query(() => Game)
+  @Query(() => GameEntity)
   gameResults(
   @Args('gameId') gameId: string,
     @Context() context: GraphQLContext,

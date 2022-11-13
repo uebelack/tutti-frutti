@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class GameResults {
+export class GameResultsEntity {
   @Field(() => String, { description: 'ID' })
     id: string;
 

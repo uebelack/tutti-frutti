@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Word {
+export class WordEntity {
   @Field(() => String, { description: 'Word ID' })
     id: string;
 

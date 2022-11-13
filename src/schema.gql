@@ -10,7 +10,7 @@ input AnswerRoundInput {
   wordId: String!
 }
 
-type Category {
+type CategoryEntity {
   """Category Description"""
   description: String
 
@@ -42,9 +42,9 @@ input FiftyFiftyInput {
   words: [WordInput!]!
 }
 
-type Game {
+type GameEntity {
   """All categories selected in game"""
-  categories: [Category!]!
+  categories: [CategoryEntity!]!
 
   """Category description selected for current round"""
   categoryDescription: String!
@@ -77,10 +77,10 @@ type Game {
   timeLimit: Int!
 
   """Current round words"""
-  words: [Word!]!
+  words: [WordEntity!]!
 }
 
-type LeaderboardEntry {
+type LeaderboardEntryEntity {
   """Place"""
   place: Float!
 
@@ -88,23 +88,23 @@ type LeaderboardEntry {
   score: Float!
 
   """User"""
-  user: User!
+  user: UserEntity!
 }
 
 type Mutation {
-  answerRound(answerRoundInput: AnswerRoundInput!): Game!
-  createGame(createGameInput: CreateGameInput!): Game!
-  skipRound(gameId: String!): Game!
-  useFiftyFifty(fiftyFiftyInput: FiftyFiftyInput!): Game!
+  answerRound(answerRoundInput: AnswerRoundInput!): GameEntity!
+  createGame(createGameInput: CreateGameInput!): GameEntity!
+  skipRound(gameId: String!): GameEntity!
+  useFiftyFifty(fiftyFiftyInput: FiftyFiftyInput!): GameEntity!
 }
 
 type Query {
-  categories: [Category!]!
-  gameResults(gameId: String!): Game!
-  leaderboard: [LeaderboardEntry!]!
+  categories: [CategoryEntity!]!
+  gameResults(gameId: String!): GameEntity!
+  leaderboard: [LeaderboardEntryEntity!]!
 }
 
-type User {
+type UserEntity {
   """User ID"""
   id: String!
 
@@ -115,7 +115,7 @@ type User {
   picture: String!
 }
 
-type Word {
+type WordEntity {
   """Is wrong"""
   fiftyFiftyWrong: Boolean
 

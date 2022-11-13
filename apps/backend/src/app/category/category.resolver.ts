@@ -1,16 +1,16 @@
 import { Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Category } from '../entities/category.entity';
+import { CategoryEntity } from '../entities/category.entity';
 import { CategoryService } from './category.service';
 
-@Resolver(() => Category)
+@Resolver(() => CategoryEntity)
 export class CategoryResolver {
   constructor(private readonly categoryService: CategoryService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Query(() => [Category])
-  categories(): Promise<Category[]> {
+  @Query(() => [CategoryEntity])
+  categories(): Promise<CategoryEntity[]> {
     return this.categoryService.findAll();
   }
 }

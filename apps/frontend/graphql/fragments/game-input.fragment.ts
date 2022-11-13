@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GAME_INPUT_FRAGMENT = gql`
-  fragment GameInputFragment on Game {
+  fragment GameInputFragment on GameEntity {
     id
     categories {
       id

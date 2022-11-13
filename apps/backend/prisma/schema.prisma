@@ -31,14 +31,26 @@ model Category {
 }
 
 model Word {
-  id                String    @id @default(cuid())
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  category          Category? @relation(fields: [categoryId], references: [id])
-  text              String    @unique
-  categoryId        String?
-  games             Game[]
-  gamesWithLastWord Game[]    @relation(name: "LastWord")
+  id                   String    @id @default(cuid())
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  category             Category? @relation(fields: [categoryId], references: [id])
+  text                 String    @unique
+  categoryId           String?
+  roundsWhereCorrect   Round[]   @relation("RoundsWhereCorrect")
+  roundsWhereIncorrect Round[]   @relation("RoundsWhereIncorrect")
+}
+
+model Round {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  index          Int
+  correctWord    Word     @relation("RoundsWhereCorrect", fields: [wordId], references: [id])
+  incorrectWords Word[]   @relation("RoundsWhereIncorrect")
+  wordId         String
+  Game           Game?    @relation(fields: [gameId], references: [id])
+  gameId         String?
 }
 
 model Game {
@@ -48,11 +60,10 @@ model Game {
   finishedAt     DateTime?
   categories     Category[]
   user           User       @relation(fields: [userId], references: [id])
-  words          Word[]
-  lastWord       Word?      @relation(name: "LastWord", fields: [wordId], references: [id])
+  rounds         Round[]
   score          Int        @default(0)
   fiftyFiftyUses Int        @default(0)
-  timesSkipped   Int        @default(0)
+  skipUses       Int        @default(0)
   userId         String
   wordId         String?
 }

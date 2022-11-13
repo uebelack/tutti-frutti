@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { LeaderboardEntry } from '../entities/leaderboard-entry.entity';
+import { LeaderboardEntryEntity } from '../entities/leaderboard-entry.entity';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class LeaderboardService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async calculateLeaderboard(): Promise<LeaderboardEntry[]> {
+  async calculateLeaderboard(): Promise<LeaderboardEntryEntity[]> {
     const result = (await this.prisma.$queryRaw`
     SELECT ROW_NUMBER() OVER (ORDER BY score DESC) AS place, l.* FROM (
       SELECT

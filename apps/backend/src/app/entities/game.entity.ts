@@ -1,9 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Category } from './category.entity';
-import { Word } from './word.entity';
+import { CategoryEntity } from './category.entity';
+import { WordEntity } from './word.entity';
 
 @ObjectType()
-export class Game {
+export class GameEntity {
   @Field(() => String, { description: 'ID' })
     id: string;
 
@@ -15,8 +15,10 @@ export class Game {
   })
     fiftyFiftyUsesLeft: number;
 
-  @Field(() => [Category], { description: 'All categories selected in game' })
-    categories: Category[];
+  @Field(() => [CategoryEntity], {
+    description: 'All categories selected in game',
+  })
+    categories: CategoryEntity[];
 
   @Field(() => String, {
     description: 'Category name selected for current round',
@@ -33,8 +35,8 @@ export class Game {
   })
     character: string;
 
-  @Field(() => [Word], { description: 'Current round words' })
-    words: Word[];
+  @Field(() => [WordEntity], { description: 'Current round words' })
+    words: WordEntity[];
 
   @Field(() => Int, { description: 'Current score' })
     score: number;

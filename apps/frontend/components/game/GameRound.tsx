@@ -7,7 +7,7 @@ const MessageBar = ({ round }: { round: GameType }): JSX.Element => (
   <div className="bg-primary-95 text-2xl border-t-6 border-b-6 border-white">
     <div className="container mx-auto py-4 flex justify-between items-center">
       <div>30 seconds</div>
-      <div>Question {round.round + 1}</div>
+      <div>Question {round.round}</div>
       <div>Score {round.score}</div>
       <div>Mute</div>
       <div>End game</div>
@@ -40,7 +40,14 @@ const GameRound = ({
         <h3>Category: {round.categoryName}</h3>
         <div className="flex">
           <div className="text-7xl mr-5">{round.character}</div>
-          <p dangerouslySetInnerHTML={{ __html: round.categoryDescription.replace('{0}', `<strong>${round.character}</strong>`) }}></p>
+          <p
+            dangerouslySetInnerHTML={{
+              __html: round.categoryDescription.replace(
+                '{0}',
+                `<strong>${round.character}</strong>`
+              ),
+            }}
+          ></p>
         </div>
         <div className="flex flex-col gap-8">
           {round.words.map((word, i) => (
