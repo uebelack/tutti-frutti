@@ -25,13 +25,15 @@ export class Game {
 
   @Field(() => String, {
     description: 'Category description selected for current round',
+    nullable: true,
   })
-    categoryDescription: string;
+    categoryDescription?: string;
 
   @Field(() => String, {
     description: 'Current character selected for current round',
+    nullable: true,
   })
-    character: string;
+    character?: string;
 
   @Field(() => [Word], { description: 'Current round words' })
     words: Word[];
