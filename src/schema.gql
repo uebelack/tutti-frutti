@@ -47,13 +47,13 @@ type Game {
   categories: [Category!]!
 
   """Category description selected for current round"""
-  categoryDescription: String!
+  categoryDescription: String
 
   """Category name selected for current round"""
   categoryName: String!
 
   """Current character selected for current round"""
-  character: String!
+  character: String
 
   """Created At"""
   createdAt: DateTime!
