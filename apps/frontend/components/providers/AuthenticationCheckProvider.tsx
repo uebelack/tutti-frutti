@@ -10,7 +10,9 @@ function AuthenticationCheckProvider({ children }) {
   if (isLoading) {
     return (
       <SplashScreenLayout>
-        <Loader />
+        <span className="mx-auto scale-75 md:scale-100 lg:scale-150 inline-block">
+          <Loader />
+        </span>
       </SplashScreenLayout>
     );
   }

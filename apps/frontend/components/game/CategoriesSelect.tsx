@@ -1,11 +1,12 @@
 import { useQuery } from '@apollo/client';
+import { motion } from 'framer-motion';
 import { CheckmarkIcon, CloseIcon } from 'icons';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Button, IconButton, Loader, Popup, Switch } from 'UI';
 import useSound from 'use-sound';
-import { Category } from '../../types';
 import { CATEGORIES } from '../../graphql/queries/categories.query';
+import { Category } from '../../types';
 
 export const CategoriesSelect = ({
   onSelect,
@@ -38,12 +39,16 @@ export const CategoriesSelect = ({
     onSelect(selectedCategories);
   };
 
-  return loading ? (
-    <span className="mx-auto scale-150 inline-block">
-      <Loader />
-    </span>
-  ) : (
-    <Popup isOpen={isOpen} onClose={() => {}}>
+  if (loading) {
+    return (
+      <span className="mx-auto scale-75 md:scale-100 lg:scale-150 inline-block">
+        <Loader />
+      </span>
+    );
+  }
+
+  const Content = (
+    <>
       <div className="flex items-center justify-between">
         <p className="text-title-md">Choose your categories</p>
         <IconButton
@@ -57,7 +62,7 @@ export const CategoriesSelect = ({
         </IconButton>
       </div>
       <div className="flex flex-col gap-2 my-5">
-        {data.categories.map((category) => (
+        {data.categories?.map((category) => (
           <label
             key={category.id}
             className="flex items-center border-b border-primary-90 pl-2 pr-5 py-2 gap-16"
@@ -66,7 +71,7 @@ export const CategoriesSelect = ({
               <p className="text-heading-lg">{category.emoji}</p>
 
               <div>
-                <p className="text-body-lg text-secondary-30">
+                <p className="text-body-lg text-secondary-30 text-left">
                   {category.name}
                 </p>
                 <p
@@ -94,7 +99,31 @@ export const CategoriesSelect = ({
           <CheckmarkIcon className="w-6" />
         </Button>
       </div>
-    </Popup>
+    </>
+  );
+
+  return (
+    <>
+      <Popup
+        isOpen={isOpen}
+        onClose={() => {}}
+        className="hidden lg:!block"
+        overlayClassName="hidden lg:grid"
+      >
+        {Content}
+      </Popup>
+      <div className="fixed inset-0 lg:hidden">
+        <motion.div
+          initial={{ opacity: 0, y: '50%' }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl py-8 px-4"
+        >
+          {Content}
+        </motion.div>
+      </div>
+    </>
   );
 };
 

@@ -118,8 +118,8 @@ const Game = (): JSX.Element => {
     <CategoriesSelect onSelect={onSelectCategories} />
   ) : (
     <>
-      <div className="bg-white text-title-lg fixed top-0 left-0 w-full text-black z-50">
-        <div className="container mx-auto py-4 flex justify-between items-center">
+      <div className="bg-white text-title-md lg:text-title-lg fixed top-0 left-0 w-full text-black z-50 border-b border-primary-95">
+        <div className="container mx-auto py-4 px-8 lg:px-0 flex justify-between items-center">
           <Countdown
             date={startTime + round.timeLimit * 1000}
             intervalDelay={100}
@@ -132,11 +132,11 @@ const Game = (): JSX.Element => {
             }}
             onComplete={() => {
               setShowHeader(true);
-              router.push(`/result/${round.id}`);
+              router.replace(`/result/${round.id}`);
             }}
           />
-          <div>Score {round.score}</div>
-          <div>Question {round.round}</div>
+          <div className="hidden lg:block">Score {round.score}</div>
+          <div>Question {round.round + 1}</div>
           {/* <div>End game</div> */}
         </div>
         <span
