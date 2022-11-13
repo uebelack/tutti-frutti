@@ -1,6 +1,7 @@
-import { Button, Popup } from 'UI';
 import cn from 'classnames';
+import { motion } from 'framer-motion';
 import { ArrowRightIcon } from 'icons';
+import { Button, Popup } from 'UI';
 import { GameType } from '../../types';
 
 const getNthAlphabetLetter = (n: number) => String.fromCharCode(65 + n);
@@ -23,14 +24,9 @@ const GameRound = ({
 }: Props): JSX.Element => {
   const fiftyFiftyUsed = round.words.some((w) => w.fiftyFiftyWrong);
 
-  return (
-    <Popup
-      isOpen={true}
-      onClose={() => {}}
-      className="!p-8 max-w-lg w-full"
-      overlayClassName="!bg-opacity-0"
-    >
-      <div className="text-center mb-16 text-body-md text-secondary-60 flex flex-wrap items-center gap-5 justify-center">
+  const Content = (
+    <div className="flex flex-col">
+      <div className="text-center mb-6 lg:mb-16 text-body-md text-secondary-60 flex flex-wrap items-center gap-2 lg:gap-5 justify-center">
         <p className="font-bold">Categories:</p>
         {round.categories.map((category) => (
           <p
@@ -44,8 +40,8 @@ const GameRound = ({
         ))}
       </div>
 
-      <div className="flex items-center gap-5 mb-12">
-        <div className="text-7xl font-semibold w-32 aspect-square rounded-full relative border border-secondary-90 shrink-0">
+      <div className="flex flex-col md:flex-row items-center gap-5 mb-6 lg:mb-12 text-black mt-auto">
+        <div className="text-7xl leading-none font-semibold w-32 aspect-square rounded-full relative border border-secondary-90 shrink-0">
           <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             {round.character}
           </p>
@@ -57,11 +53,11 @@ const GameRound = ({
               `<strong>${round.character}</strong>`
             ),
           }}
-          className="text-body-lg"
+          className="text-body-md lg:text-body-lg"
         ></p>
       </div>
 
-      <div className="flex flex-col gap-8 mb-6">
+      <div className="flex flex-col gap-4 lg:gap-8 mb-6">
         {round.words.map((word, i) => (
           <Button
             shape="rounded"
@@ -69,7 +65,7 @@ const GameRound = ({
             key={word.id}
             onClick={() => onSelect(word.id)}
             disabled={word.fiftyFiftyWrong}
-            className="text-left"
+            className="text-left text-black"
           >
             <span className="uppercase font-bold">
               {getNthAlphabetLetter(i)}.
@@ -79,7 +75,7 @@ const GameRound = ({
         ))}
       </div>
 
-      <div className="mx-auto w-max flex gap-8 pt-6 border-t border-secondary-90">
+      <div className="mx-auto w-full lg:w-max flex justify-between gap-8 pt-6 border-t border-secondary-90">
         <Button
           shape="pill"
           color="purple"
@@ -97,7 +93,31 @@ const GameRound = ({
           Pass <ArrowRightIcon className="w-5" />
         </Button>
       </div>
-    </Popup>
+    </div>
+  );
+
+  return (
+    <>
+      <Popup
+        isOpen={true}
+        onClose={() => {}}
+        className="!p-8 max-w-lg w-full hidden lg:block"
+        overlayClassName="!bg-opacity-0 hidden lg:grid"
+      >
+        {Content}
+      </Popup>
+      <div className="fixed inset-0 lg:hidden">
+        <motion.div
+          initial={{ opacity: 0, x: '50%' }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: '-50%' }}
+          transition={{ duration: 0.5 }}
+          className="!p-8 !pt-20 w-full bg-white h-screen max-h-screen overflow-auto"
+        >
+          {Content}
+        </motion.div>
+      </div>
+    </>
   );
 };
 
