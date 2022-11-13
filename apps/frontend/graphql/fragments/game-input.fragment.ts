@@ -8,7 +8,7 @@ export const GAME_INPUT_FRAGMENT = gql`
       name
     }
     createdAt
-    fiftyFiftyUses
+    fiftyFiftyUsesLeft
     round
     categoryName
     score

@@ -15,14 +15,11 @@ import { FiftyFiftyInput } from '../../types/fifty-fifty-input';
 const Game = (): JSX.Element => {
   const router = useRouter();
   const [round, setRound] = useState<GameType>();
-  const [noMoreFiftyFifty, setNoMoreFiftyFifty] = useState(false);
 
   const mutationsOptions = {
     onError: (error) => {
       if (error.message === Errors.TIME_IS_UP) {
         router.replace(`/result/${round.id}`);
-      } else if (error.message === Errors.NO_MORE_50_50) {
-        setNoMoreFiftyFifty(true);
       } else {
         throw error;
       }
@@ -57,7 +54,9 @@ const Game = (): JSX.Element => {
       },
     });
 
-    setRound(currentRound.data.createGame);
+    if (currentRound.data.createGame) {
+      setRound(currentRound.data.createGame);
+    }
   };
 
   const onAnswerRound = async (wordId: string) => {
@@ -69,7 +68,9 @@ const Game = (): JSX.Element => {
         },
       },
     });
-    setRound(currentRound.data.answerRound);
+    if (currentRound.data?.answerRound) {
+      setRound(currentRound.data.answerRound);
+    }
   };
 
   const onSkipRound = async () => {
@@ -102,7 +103,6 @@ const Game = (): JSX.Element => {
           onSelect={onAnswerRound}
           onSkip={onSkipRound}
           onFiftyFifty={onFiftyFifty}
-          fiftyFiftyDisabled={noMoreFiftyFifty}
         />
       )}
     </div>

@@ -11,9 +11,9 @@ export class Game {
     createdAt: Date;
 
   @Field(() => Int, {
-    description: 'How many times fifty-fifty lifeline was used',
+    description: 'How many times fifty-fifty lifeline can be used',
   })
-    fiftyFiftyUses: number;
+    fiftyFiftyUsesLeft: number;
 
   @Field(() => [Category], { description: 'All categories selected in game' })
     categories: Category[];

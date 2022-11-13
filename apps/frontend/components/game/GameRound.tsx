@@ -18,8 +18,6 @@ const MessageBar = ({ round }: { round: GameType }): JSX.Element => (
 interface Props {
   round: GameType;
 
-  fiftyFiftyDisabled: boolean;
-
   onSelect(id: string): void;
 
   onSkip(): void;
@@ -32,7 +30,6 @@ const GameRound = ({
   onSelect,
   onSkip,
   onFiftyFifty,
-  fiftyFiftyDisabled,
 }: Props): JSX.Element => {
   const fiftyFiftyUsed = round.words.some((w) => w.fiftyFiftyWrong);
 
@@ -63,7 +60,7 @@ const GameRound = ({
             shape="pill"
             color="purple"
             onClick={onFiftyFifty}
-            disabled={fiftyFiftyUsed || fiftyFiftyDisabled}
+            disabled={fiftyFiftyUsed || round.fiftyFiftyUsesLeft <= 0}
           >
             50:50
           </Button>

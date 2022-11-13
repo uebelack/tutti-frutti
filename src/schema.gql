@@ -52,8 +52,8 @@ type Game {
   """Created At"""
   createdAt: DateTime!
 
-  """How many times fifty-fifty lifeline was used"""
-  fiftyFiftyUses: Int!
+  """How many times fifty-fifty lifeline can be used"""
+  fiftyFiftyUsesLeft: Int!
 
   """ID"""
   id: String!

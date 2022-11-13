@@ -13,7 +13,7 @@ export interface GameType {
   id: string;
   categories: Category[];
   createdAt: string;
-  fiftyFiftyUses: boolean;
+  fiftyFiftyUsesLeft: number;
   round: number;
   categoryName: string;
   score: number;

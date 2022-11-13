@@ -63,6 +63,7 @@ export class GameService {
       ...game,
       ...round,
       round: game.words.length,
+      fiftyFiftyUsesLeft: this.FIFTY_FIFTY_DEFAULT,
     };
   }
 
@@ -99,6 +100,10 @@ export class GameService {
       ...round,
       round: updatedGame.words.length,
       previousRoundCorrect: isCorrect,
+      fiftyFiftyUsesLeft: await this.getFiftyFiftyUsesLeft(
+        auth0Id,
+        game.fiftyFiftyUses,
+      ),
     };
   }
 
@@ -109,12 +114,7 @@ export class GameService {
     const game = await this.findGame(auth0Id, fiftyFiftyInput.gameId);
     this.checkForTimeout(game);
 
-    const isUserInLeaderboard = await this.leaderboardService.isUserInLeaderboard(auth0Id);
-    const maxFiftyFifty = isUserInLeaderboard
-      ? this.FIFTY_FIFTY_TOP
-      : this.FIFTY_FIFTY_DEFAULT;
-
-    if (game.fiftyFiftyUses >= maxFiftyFifty) {
+    if ((await this.getFiftyFiftyUsesLeft(auth0Id, game.fiftyFiftyUses)) <= 0) {
       throw new ConflictException(Errors.NO_MORE_50_50);
     }
 
@@ -150,6 +150,10 @@ export class GameService {
         fiftyFiftyWrong: incorrectWordIdsToShow.indexOf(word.id) !== -1,
       })),
       round: game.words.length,
+      fiftyFiftyUsesLeft: await this.getFiftyFiftyUsesLeft(
+        auth0Id,
+        game.fiftyFiftyUses,
+      ),
     };
   }
 
@@ -178,7 +182,43 @@ export class GameService {
       ...game,
       ...round,
       round: game.words.length,
+      fiftyFiftyUsesLeft: await this.getFiftyFiftyUsesLeft(
+        auth0Id,
+        game.fiftyFiftyUses,
+      ),
     };
+  }
+
+  async findGame(auth0Id: string, gameId: string) {
+    const game = await this.prismaService.game.findFirst({
+      where: {
+        id: gameId,
+        user: {
+          auth0: auth0Id,
+        },
+      },
+      include: {
+        categories: true,
+        words: true,
+        lastWord: true,
+      },
+    });
+
+    if (!game) {
+      throw new NotFoundException(Errors.GAME_NOT_FOUND);
+    }
+
+    return game;
+  }
+
+  private async getFiftyFiftyUsesLeft(auth0Id: string, fiftyFiftyUses: number) {
+    const isUserInLeaderboard = await this.leaderboardService.isUserInLeaderboard(auth0Id);
+    const maxFiftyFifty = isUserInLeaderboard
+      ? this.FIFTY_FIFTY_TOP
+      : this.FIFTY_FIFTY_DEFAULT;
+
+    console.log(isUserInLeaderboard, maxFiftyFifty, fiftyFiftyUses);
+    return maxFiftyFifty - fiftyFiftyUses;
   }
 
   private checkForTimeout(game: { createdAt: Date }) {
@@ -257,27 +297,5 @@ export class GameService {
       categoryName: nextCategory.name,
       words: shuffle([correctWord, ...incorrectWords]),
     };
-  }
-
-  async findGame(auth0Id: string, gameId: string) {
-    const game = await this.prismaService.game.findFirst({
-      where: {
-        id: gameId,
-        user: {
-          auth0: auth0Id,
-        },
-      },
-      include: {
-        categories: true,
-        words: true,
-        lastWord: true,
-      },
-    });
-
-    if (!game) {
-      throw new NotFoundException(Errors.GAME_NOT_FOUND);
-    }
-
-    return game;
   }
 }
