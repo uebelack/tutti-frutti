@@ -30,22 +30,22 @@ const Game = (): JSX.Element => {
   };
 
   const [createGame] = useMutation<{ createGame: GameType }, CreateGameInput>(
-    CREATE_GAME,
+    CREATE_GAME
   );
 
   const [answerRound] = useMutation<
-  { answerRound: GameType },
-  AnswerRoundInput
+    { answerRound: GameType },
+    AnswerRoundInput
   >(ANSWER_ROUND, mutationsOptions);
 
   const [skipRound] = useMutation<{ skipRound: GameType }, { gameId: string }>(
     SKIP_ROUND,
-    mutationsOptions,
+    mutationsOptions
   );
 
   const [mutateFiftyFifty] = useMutation<
-  { useFiftyFifty: GameType },
-  FiftyFiftyInput
+    { useFiftyFifty: GameType },
+    FiftyFiftyInput
   >(USE_FIFTY_FIFTY, mutationsOptions);
 
   const onSelectCategories = async (categories: string[]) => {
@@ -86,7 +86,9 @@ const Game = (): JSX.Element => {
         },
       },
     });
-    setRound(currentRound.data.useFiftyFifty);
+    if (currentRound.data?.useFiftyFifty) {
+      setRound(currentRound.data.useFiftyFifty);
+    }
   };
 
   return (
