@@ -125,7 +125,10 @@ export class GameService {
 
     const round = await this.getWordsAndCategoryForRound(game);
 
-    return this.getGameFields(auth0Id, updatedGame, round);
+    return this.getGameFields(auth0Id, updatedGame, {
+      ...round,
+      previousRoundCorrect: isCorrect,
+    });
   }
 
   async useFiftyFifty(
@@ -381,7 +384,9 @@ export class GameService {
       categories: prisma.Category[];
       rounds: prisma.Round[];
     },
-    round: WordAndCategory
+    round: WordAndCategory & {
+      previousRoundCorrect?: boolean;
+    }
   ): Promise<GameEntity> {
     const fiftyFiftyUsesLeft = await this.getFiftyFiftyUsesLeft(
       auth0Id,

@@ -31,8 +31,7 @@ const Game = (): JSX.Element => {
 
   const mutationsOptions = {
     onCompleted: (data) => {
-      console.log(data.answerRound);
-      if (data.answerRound.previousRoundCorrect) {
+      if (data.answerRound?.previousRoundCorrect) {
         playSuccessSfx();
       } else {
         playFailSfx();

@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import useWindowSize from 'react-use/lib/useWindowSize';
+import Confetti from 'react-confetti';
 import { Button, Loader } from 'UI';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -13,6 +15,7 @@ const Result = () => {
   const [playCongratulationSfx] = useSound('/sounds/congratulations.mp3');
 
   useEffect(playCongratulationSfx, [playCongratulationSfx]);
+  const { width, height } = useWindowSize();
 
   const { data, error, loading } = useQuery<{ gameResults: GameResults }>(
     GAME_RESULTS,
@@ -45,6 +48,7 @@ const Result = () => {
       <Link href="/" className="text-center">
         Go Home
       </Link>
+      <Confetti width={width} height={height} />
     </div>
   );
 };
