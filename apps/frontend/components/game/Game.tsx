@@ -127,13 +127,12 @@ const Game = (): JSX.Element => {
             renderer={({ total }) => (
               <span>{(total / 1e3).toFixed(1)} seconds left</span>
             )}
-            onTick={({ total, completed }) => {
-              if (completed) {
-                setShowHeader(true);
-                router.push(`/results/${round.id}`);
-              } else {
-                setBarPercent(Math.round(total / round.timeLimit / 10));
-              }
+            onTick={({ total }) => {
+              setBarPercent(Math.round(total / round.timeLimit / 10));
+            }}
+            onComplete={() => {
+              setShowHeader(true);
+              router.replace(`/result/${round.id}`);
             }}
           />
           <div className="hidden lg:block">Score {round.score}</div>
