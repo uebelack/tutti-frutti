@@ -31,6 +31,7 @@ type MappedWord = Pick<prisma.Word, 'id' | 'text'> & {
   category: Pick<prisma.Category, 'id' | 'name' | 'description'>;
 };
 
+// IMP move to separate mapper file
 const wordMapper = (word: RawWord): MappedWord => ({
   id: word.word_id,
   text: word.word_text,
@@ -259,7 +260,6 @@ export class GameService {
     categoryIds: string[],
     usedWordIds: string[]
   ): Promise<MappedWord> {
-    console.log(usedWordIds);
     const [row] = await this.prismaService.$queryRaw<RawWord[]>`
       SELECT
         w.id as "word_id",
