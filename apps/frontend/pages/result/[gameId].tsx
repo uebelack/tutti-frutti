@@ -15,8 +15,7 @@ import { GameResults } from '../../types';
 const Result = () => {
   const router = useRouter();
   const [playCongratulationSfx] = useSound('/sounds/congratulations.mp3');
-
-  useEffect(playCongratulationSfx, [playCongratulationSfx]);
+  const [playPittySfx] = useSound('/sounds/pitty.mp3');
 
   const { width, height } = useWindowSize();
 
@@ -24,6 +23,13 @@ const Result = () => {
     GAME_RESULTS,
     {
       variables: { gameId: router.query.gameId },
+      onCompleted: (d: { gameResults: GameResults }) => {
+        if (d?.gameResults?.score > 0) {
+          playCongratulationSfx();
+        } else {
+          playPittySfx();
+        }
+      }
     }
   );
 
