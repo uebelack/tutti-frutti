@@ -31,6 +31,7 @@ module.exports = {
         'class-methods-use-this': 'off',
         'import/prefer-default-export': 'off',
         'import/no-named-as-default': 'off',
+        '@typescript-eslint/comma-dangle': 'off',
         'max-len': [
           'error',
           {
