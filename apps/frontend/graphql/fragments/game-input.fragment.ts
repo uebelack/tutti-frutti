@@ -11,6 +11,8 @@ export const GAME_INPUT_FRAGMENT = gql`
     fiftyFiftyUsesLeft
     round
     categoryName
+    categoryDescription
+    character
     score
     words {
       id

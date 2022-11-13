@@ -16,6 +16,8 @@ export interface GameType {
   fiftyFiftyUsesLeft: number;
   round: number;
   categoryName: string;
+  categoryDescription: string;
+  character: string;
   score: number;
   words: Word[];
 }
