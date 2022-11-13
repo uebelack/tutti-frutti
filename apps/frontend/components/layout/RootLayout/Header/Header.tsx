@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { ControlledMenu } from '@szhsin/react-menu';
+import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
 import cn from 'classnames';
 import { CloseIcon, ExpandIcon, MenuIcon, ShrinkIcon } from 'libs/icons/src';
 import { useEffect, useRef, useState } from 'react';
@@ -103,7 +103,7 @@ export const Header = () => {
         initialMounted
         className="hidden lg:block"
       >
-        <MenuContent />
+        <MenuContent closeMenu={() => setOpenMenu(false)} />
       </ControlledMenu>
 
       {/* Mobile Menu */}
@@ -124,7 +124,7 @@ export const Header = () => {
           distance: 0,
         }}
       >
-        <MenuContent />
+        <MenuContent closeMenu={() => setOpenMenu(false)} />
       </Drawer>
     </>
   );

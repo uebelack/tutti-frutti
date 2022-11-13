@@ -1,4 +1,6 @@
 /* eslint-disable import/extensions */
 export * from './lib/Button/Button';
-export * from '../../../apps/frontend/components/layout/RootLayout/Header/Header';
 export * from './lib/IconButton/IconButton';
+export * from './lib/Loader/Loader';
+export * from './lib/Popup/Popup';
+export * from './lib/Switch/Switch';

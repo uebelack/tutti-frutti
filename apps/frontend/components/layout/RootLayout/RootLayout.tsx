@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Header } from 'UI';
+import Header from './Header/Header';
 
 export interface RootLayoutProps {
   shouldShowHeader: boolean;

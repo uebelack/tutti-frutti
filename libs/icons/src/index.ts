@@ -1,4 +1,6 @@
+export { ReactComponent as ArrowRightIcon } from './icons/ArrowRight.svg';
 export { ReactComponent as AwardIcon } from './icons/Award.svg';
+export { ReactComponent as CheckmarkIcon } from './icons/Checkmark.svg';
 export { ReactComponent as CloseIcon } from './icons/Close.svg';
 export { ReactComponent as CopyIcon } from './icons/Copy.svg';
 export { ReactComponent as ExpandIcon } from './icons/Expand.svg';

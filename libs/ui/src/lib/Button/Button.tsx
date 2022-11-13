@@ -1,9 +1,8 @@
 import cn from 'classnames';
-import React, { ElementType, forwardRef } from 'react';
+import { ButtonHTMLAttributes, ElementType, forwardRef } from 'react';
 import s from './Button.module.css';
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * @default 'blue
    */
@@ -28,7 +27,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       ...rest
     },
-    ref,
+    ref
   ) => (
     <Component
       role="button"
@@ -38,7 +37,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     >
       {children}
     </Component>
-  ),
+  )
 );
 
 Button.displayName = 'Button';

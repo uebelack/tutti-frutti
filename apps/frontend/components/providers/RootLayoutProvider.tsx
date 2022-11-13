@@ -3,9 +3,8 @@ import RootLayout from '../layout/RootLayout/RootLayout';
 
 const RootContext = createContext({
   showHeader: true,
-  setShowHeader: (showHeader: boolean) => {
-    return;
-  },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setShowHeader: (showHeader: boolean) => {},
 });
 
 export const useRootContext = () => useContext(RootContext);
@@ -17,8 +16,8 @@ const RootLayoutProvider = ({
 }) => {
   const [showHeader, setShowHeader] = useState(true);
 
-  const setHeaderVisibility = (showHeader: boolean) => {
-    setShowHeader(showHeader);
+  const setHeaderVisibility = (value: boolean) => {
+    setShowHeader(value);
   };
 
   return (

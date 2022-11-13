@@ -38,6 +38,8 @@ module.exports = {
         black: '#000000',
         white: '#ffffff',
         'off-white': '#f4f4f6',
+        warning: '#FFB800',
+        error: '#F10000',
       },
       fontFamily: {
         sans: ['Roboto', ...defaultTheme.fontFamily.sans],
@@ -51,7 +53,7 @@ module.exports = {
           {
             lineHeight: '1rem',
             fontWeight: 400,
-            letterSpacing: '0.33em',
+            letterSpacing: '0.033em',
           },
         ],
         /**
