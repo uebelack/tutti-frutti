@@ -102,6 +102,7 @@ type Query {
   categories: [CategoryEntity!]!
   gameResults(gameId: String!): GameEntity!
   leaderboard: [LeaderboardEntryEntity!]!
+  topScore: UserEntity!
 }
 
 type UserEntity {
@@ -113,6 +114,9 @@ type UserEntity {
 
   """Url to the users picture"""
   picture: String!
+
+  """Top Score"""
+  score: Float
 }
 
 type WordEntity {

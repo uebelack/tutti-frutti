@@ -1,5 +1,5 @@
 import {
-  Args, Context, Mutation, Query, Resolver,
+  Args, Context, Mutation, Query, Resolver
 } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GameService } from './game.service';
@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GraphQLContext } from '../../types/graphQlContext';
 import { AnswerRoundInput } from './dto/answer-round.input';
 import { FiftyFiftyInput } from './dto/fifty-fifty.input';
+import { UserEntity } from '../entities/user.entity';
 
 @Resolver(() => GameEntity)
 export class GameResolver {
@@ -18,7 +19,7 @@ export class GameResolver {
   @Mutation(() => GameEntity)
   createGame(
   @Args('createGameInput') createGameInput: CreateGameInput,
-    @Context() context: GraphQLContext,
+    @Context() context: GraphQLContext
   ) {
     return this.gameService.startGame(context.req.user.sub, createGameInput);
   }
@@ -27,7 +28,7 @@ export class GameResolver {
   @Mutation(() => GameEntity)
   answerRound(
   @Args('answerRoundInput') answerRoundInput: AnswerRoundInput,
-    @Context() context: GraphQLContext,
+    @Context() context: GraphQLContext
   ) {
     return this.gameService.answerRound(context.req.user.sub, answerRoundInput);
   }
@@ -36,11 +37,11 @@ export class GameResolver {
   @Mutation(() => GameEntity)
   useFiftyFifty(
   @Args('fiftyFiftyInput') fiftyFiftyInput: FiftyFiftyInput,
-    @Context() context: GraphQLContext,
+    @Context() context: GraphQLContext
   ) {
     return this.gameService.useFiftyFifty(
       context.req.user.sub,
-      fiftyFiftyInput,
+      fiftyFiftyInput
     );
   }
 
@@ -48,7 +49,7 @@ export class GameResolver {
   @Mutation(() => GameEntity)
   skipRound(
   @Args('gameId') gameId: string,
-    @Context() context: GraphQLContext,
+    @Context() context: GraphQLContext
   ) {
     return this.gameService.skipRound(context.req.user.sub, gameId);
   }
@@ -57,8 +58,14 @@ export class GameResolver {
   @Query(() => GameEntity)
   gameResults(
   @Args('gameId') gameId: string,
-    @Context() context: GraphQLContext,
+    @Context() context: GraphQLContext
   ) {
     return this.gameService.getResultsForGame(context.req.user.sub, gameId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Query(() => UserEntity)
+  topScore(@Context() context: GraphQLContext) {
+    return this.gameService.getUserTopScore(context.req.user.sub);
   }
 }

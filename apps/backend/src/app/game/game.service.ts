@@ -18,6 +18,7 @@ import { CategoryService } from '../category/category.service';
 import { GameResultsEntity } from '../entities/game-results.entity';
 import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 import { GameConfig } from '../config/game-config.type';
+import { UserEntity } from '../entities/user.entity';
 
 interface RawWord {
   word_id: string;
@@ -60,6 +61,29 @@ export class GameService {
     private configService: ConfigService
   ) {
     this.config = configService.get('game');
+  }
+
+  async getUserTopScore(auth0Id: string): Promise<UserEntity> {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        auth0: auth0Id,
+      },
+    });
+
+    const game = await this.prismaService.game.findFirst({
+      where: {
+        userId: user.id,
+      },
+      orderBy: {
+        score: 'desc',
+      },
+      take: 1,
+    });
+
+    return {
+      ...user,
+      score: game?.score,
+    };
   }
 
   async startGame(
@@ -370,7 +394,8 @@ export class GameService {
     auth0Id: string,
     fiftyFiftyUses: number
   ): Promise<number> {
-    const isUserInLeaderboard = await this.leaderboardService.isUserInLeaderboard(auth0Id);
+    const isUserInLeaderboard =
+      await this.leaderboardService.isUserInLeaderboard(auth0Id);
     const maxFiftyFifty = isUserInLeaderboard
       ? this.config.fiftyFiftyTop
       : this.config.fiftyFiftyDefault;
