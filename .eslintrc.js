@@ -33,6 +33,7 @@ module.exports = {
         'import/no-named-as-default': 'off',
         '@typescript-eslint/comma-dangle': 'off',
         'operator-linebreak': 'off',
+        'object-curly-newline': 'off',
         'max-len': [
           'error',
           {
