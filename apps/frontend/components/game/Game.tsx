@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Countdown from 'react-countdown';
 import cn from 'classnames';
+import { ClockIcon, CloseIcon, CoinIcon, MessageIcon, VolumeIcon } from 'icons';
 import { ANSWER_ROUND } from '../../graphql/mutations/answer-round.mutation';
 import { CREATE_GAME } from '../../graphql/mutations/create-game.mutation';
 import { SKIP_ROUND } from '../../graphql/mutations/skip-round.mutation';
@@ -15,10 +16,12 @@ import { FiftyFiftyInput } from '../../types/fifty-fifty-input';
 import { useRootContext } from '../providers/RootLayoutProvider';
 import CategoriesSelect from './CategoriesSelect';
 import GameRound from './GameRound';
+import s from './Game.module.css';
 
 const Game = (): JSX.Element => {
   const [playSuccessSfx] = useSound('/sounds/success.mp3');
   const [playFailSfx] = useSound('/sounds/fail.mp3');
+  const [mute, setMute] = useState(false);
 
   const router = useRouter();
   const [round, setRound] = useState<GameType>();
@@ -29,6 +32,7 @@ const Game = (): JSX.Element => {
 
   const mutationsOptions = {
     onCompleted: (data) => {
+      if (mute) return;
       if (data.answerRound?.previousRoundCorrect) {
         playSuccessSfx();
       } else {
@@ -119,13 +123,19 @@ const Game = (): JSX.Element => {
   ) : (
     <>
       <div className="bg-white text-title-md lg:text-title-lg fixed top-0 left-0 w-full text-black z-50 border-b border-primary-95">
-        <div className="container mx-auto py-4 px-8 lg:px-0 flex justify-between items-center">
+        <div className="container mx-auto py-4 px-8 lg:px-0 flex justify-between items-center relative z-10">
           <Countdown
             date={startTime + round.timeLimit * 1000}
             intervalDelay={100}
             precision={1}
             renderer={({ total }) => (
-              <span>{(total / 1e3).toFixed(1)} seconds left</span>
+              <div className={s.badge}>
+                <ClockIcon />
+                <span className="font-bold mr-1">
+                  {(total / 1e3).toFixed(1)}{' '}
+                </span>
+                Seconds
+              </div>
             )}
             onTick={({ total }) => {
               setBarPercent(Math.round(total / round.timeLimit / 10));
@@ -135,9 +145,31 @@ const Game = (): JSX.Element => {
               router.replace(`/result/${round.id}`);
             }}
           />
-          <div className="hidden lg:block">Score {round.score}</div>
-          <div>Question {round.round + 1}</div>
-          {/* <div>End game</div> */}
+          <div className={s.badge}>
+            <MessageIcon />
+            <span>
+              Question
+              <span className="font-bold ml-1">{round.round}</span>
+            </span>
+          </div>
+          <div className={cn('hidden lg:block', s.badge)}>
+            <CoinIcon />
+            <span>{round.score} Points</span>
+          </div>
+          <div
+            className={cn('cursor-pointer', s.badge)}
+            onClick={() => setMute((m) => !m)}
+          >
+            <VolumeIcon />
+            <span>{mute ? 'Unmute' : 'Mute'}</span>
+          </div>
+          <div
+            className={cn('cursor-pointer', s.badge)}
+            onClick={() => router.replace('/')}
+          >
+            <CloseIcon />
+            <span>End Game</span>
+          </div>
         </div>
         <span
           className={cn(
