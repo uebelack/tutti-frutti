@@ -39,10 +39,12 @@ const Result = () => {
     );
   }
 
+  const success = data?.gameResults?.score > 0;
+
   const Content = (
     <>
-      <h1 className="text-heading-lg mb-10">Congratulations 🎉</h1>
-      <p className="text-9xl mb-10">🏆</p>
+      <h1 className="text-heading-lg mb-10">{ success ? 'Congratulations 🎉' : 'What a pity 🤦‍♀️' } </h1>
+      <p className="text-9xl mb-10">{ success ? '🏆' : '💩' }</p>
       <p className="text-heading-sm mb-6">Your total score:</p>
       <p className="text-5xl mb-10">{data?.gameResults?.score}</p>
       <Button
@@ -85,12 +87,13 @@ const Result = () => {
           {Content}
         </motion.div>
       </div>
-      <Confetti
+      {success
+      && <Confetti
         width={width}
         height={height}
         className="!z-50 !fixed"
         initialVelocityY={0.5}
-      />
+      />}
     </>
   );
 };
