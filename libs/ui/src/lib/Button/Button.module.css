@@ -7,7 +7,7 @@
 }
 
 .blue {
-  @apply bg-blue-dark text-white enabled:hover:bg-blue;
+  @apply bg-blue-dark text-white enabled:hover:bg-blue enabled:hover:bg-opacity-80;
 }
 
 .purple {

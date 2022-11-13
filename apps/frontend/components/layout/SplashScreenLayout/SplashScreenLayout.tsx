@@ -5,16 +5,15 @@ import Logo from '../../../public/Logo.png';
 import BGDesktop from '../../../public/splash-bg-desktop.png';
 import BGMobile from '../../../public/splash-bg-mobile.png';
 
-/* eslint-disable-next-line */
 export interface SplashScreenLayoutProps {
   noAnimation?: boolean;
   children: ReactNode | ReactNode[];
 }
 
-export function SplashScreenLayout({
+export const SplashScreenLayout = ({
   noAnimation,
   children,
-}: SplashScreenLayoutProps) {
+}: SplashScreenLayoutProps) => {
   const [showLogo, setShowLogo] = useState(false);
 
   useEffect(() => {
@@ -48,7 +47,7 @@ export function SplashScreenLayout({
       />
       <div className="relative container mx-auto h-full grid place-items-center">
         <div className="w-full text-center flex flex-col items-center gap-24">
-          {showLogo && !noAnimation && (
+          {showLogo && !noAnimation ? (
             <>
               <motion.div
                 initial={{ opacity: 0, y: '100%' }}
@@ -79,11 +78,13 @@ export function SplashScreenLayout({
                 {children}
               </motion.div>
             </>
+          ) : (
+            <div className="w-full">{children}</div>
           )}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default SplashScreenLayout;

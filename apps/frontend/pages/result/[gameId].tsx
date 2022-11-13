@@ -1,10 +1,9 @@
-import { Button } from 'UI';
+import { Button, Loader } from 'UI';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { Errors } from '@toptal-hackathon-t2/types';
 import { GAME_RESULTS } from '../../graphql/queries/game-results';
-import Loader from '../../components/Loader';
 import { GameResults } from '../../types';
 
 const Result = () => {

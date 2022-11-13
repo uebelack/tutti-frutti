@@ -31,9 +31,11 @@ import {
 import { Button, IconButton } from 'UI';
 import MenuButton from './MenuButton';
 
-export interface MenuProps {}
+export interface MenuProps {
+  closeMenu: () => void;
+}
 
-const MenuContent = () => {
+const MenuContent = ({ closeMenu }: MenuProps) => {
   const { user, logout } = useAuth0();
 
   const [copied, setCopied] = useState(false);
@@ -136,6 +138,7 @@ const MenuContent = () => {
           Icon={LeaderboardIcon}
           content="Leaderboard"
           link="/leaderboard"
+          onClick={closeMenu}
         />
         <div>
           <Button
@@ -190,19 +193,38 @@ const MenuContent = () => {
           </Drawer>
         </div>
 
-        <MenuButton Icon={HistoryIcon} content="History" link="/history" />
+        <MenuButton
+          Icon={HistoryIcon}
+          content="History"
+          link="/history"
+          onClick={closeMenu}
+        />
         <MenuButton
           Icon={AwardIcon}
           content="Achievements"
           link="/achievements"
+          onClick={closeMenu}
         />
-        <MenuButton Icon={SettingsIcon} content="Settings" link="/settings" />
+        <MenuButton
+          Icon={SettingsIcon}
+          content="Settings"
+          link="/settings"
+          onClick={closeMenu}
+        />
         <MenuButton
           Icon={InfoCircleIcon}
           content="About Tutti Frutti"
           link="/about"
+          onClick={closeMenu}
         />
-        <MenuButton Icon={LogoutIcon} content="Logout" onClick={logout} />
+        <MenuButton
+          Icon={LogoutIcon}
+          content="Logout"
+          onClick={() => {
+            logout();
+            closeMenu();
+          }}
+        />
       </div>
     </>
   ) : null;

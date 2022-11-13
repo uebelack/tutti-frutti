@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useRouter } from 'next/router';
+import { Loader } from 'UI';
 import SplashScreenLayout from '../layout/SplashScreenLayout/SplashScreenLayout';
 
 function AuthenticationCheckProvider({ children }) {
@@ -7,7 +8,11 @@ function AuthenticationCheckProvider({ children }) {
   const router = useRouter();
 
   if (isLoading) {
-    return <SplashScreenLayout>Loading...</SplashScreenLayout>;
+    return (
+      <SplashScreenLayout>
+        <Loader />
+      </SplashScreenLayout>
+    );
   }
 
   if (isAuthenticated || router.pathname === '/login') {

@@ -5,13 +5,9 @@ import { Button } from 'UI';
 export type MenuButtonProps = {
   Icon: ElementType;
   content: string | ReactNode | ReactNode[];
-} & (
-  | {
-      link: string;
-      onClick?: never;
-    }
-  | { link?: never; onClick: () => void }
-);
+  onClick?: () => void;
+  link?: string;
+};
 
 const MenuButton = ({ Icon, content, link, onClick }: MenuButtonProps) => (
   <Button
