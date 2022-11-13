@@ -37,4 +37,9 @@ export class Game {
     description: 'Previous round correct',
   })
     previousRoundCorrect?: boolean;
+
+  @Field(() => Int, {
+    description: 'Time limit for current round',
+  })
+    timeLimit: number;
 }

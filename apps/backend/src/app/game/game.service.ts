@@ -65,7 +65,11 @@ export class GameService {
       ...game,
       ...round,
       round: game.words.length,
-      fiftyFiftyUsesLeft: this.FIFTY_FIFTY_DEFAULT,
+      fiftyFiftyUsesLeft: await this.getFiftyFiftyUsesLeft(
+        auth0Id,
+        game.fiftyFiftyUses,
+      ),
+      timeLimit: this.TIME_LIMIT_SEC,
     };
   }
 
@@ -106,6 +110,7 @@ export class GameService {
         auth0Id,
         game.fiftyFiftyUses,
       ),
+      timeLimit: this.TIME_LIMIT_SEC,
     };
   }
 
@@ -156,6 +161,7 @@ export class GameService {
         auth0Id,
         game.fiftyFiftyUses,
       ),
+      timeLimit: this.TIME_LIMIT_SEC,
     };
   }
 
@@ -188,6 +194,7 @@ export class GameService {
         auth0Id,
         game.fiftyFiftyUses,
       ),
+      timeLimit: this.TIME_LIMIT_SEC,
     };
   }
 

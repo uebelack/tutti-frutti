@@ -67,6 +67,9 @@ type Game {
   """Current score"""
   score: Int!
 
+  """Time limit for current round"""
+  timeLimit: Int!
+
   """Current round words"""
   words: [Word!]!
 }
