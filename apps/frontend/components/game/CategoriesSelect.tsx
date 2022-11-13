@@ -57,7 +57,7 @@ export const CategoriesSelect = ({
         </IconButton>
       </div>
       <div className="flex flex-col gap-2 my-5">
-        {data.categories.map((category) => (
+        {data.categories?.map((category) => (
           <label
             key={category.id}
             className="flex items-center border-b border-primary-90 pl-2 pr-5 py-2 gap-16"

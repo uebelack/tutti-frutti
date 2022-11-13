@@ -15,7 +15,7 @@ export default () => ({
     ),
     incorrectAnswerPoints: int(
       process.env.TUTTI_FRUTTI_INCORRECT_ANSWER_POINTS,
-      -10
+      -20
     ),
     fiftyFiftyDefault: int(process.env.TUTTI_FRUTTI_FIFTY_FIFTY_DEFAULT, 1),
     fiftyFiftyTop: int(process.env.TUTTI_FRUTTI_FIFTY_FIFTY_TOP, 2),
