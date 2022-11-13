@@ -74,6 +74,9 @@ export const CategoriesSelect = ({
                 <p className="text-body-lg text-secondary-30 text-left">
                   {category.name}
                 </p>
+                <p
+                className="text-body-sm text-secondary-60 max-w-[40ch]"
+                dangerouslySetInnerHTML={{ __html: category.description.replace('{0}', 'the current character') }}/>
               </div>
             </div>
             <Switch
