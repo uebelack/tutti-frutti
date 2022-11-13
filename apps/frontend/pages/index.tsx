@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button } from 'UI';
+import { Button, ComingSoon } from 'UI';
 import useSound from 'use-sound';
 import SplashScreenLayout from '../components/layout/SplashScreenLayout/SplashScreenLayout';
 
@@ -18,12 +18,14 @@ const Home = () => {
       >
         Quick Play
       </Button>
-      {/* <Button
-        color="white"
-        className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
-      >
-        Multiplayer
-      </Button> */}
+      <ComingSoon className="z-10">
+        <Button
+          color="white"
+          className="text-title-lg hover:!bg-white hover:!bg-opacity-80 w-full"
+        >
+          Multiplayer
+        </Button>
+      </ComingSoon>
       <Button
         color="white"
         className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
