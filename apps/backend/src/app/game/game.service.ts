@@ -219,7 +219,6 @@ export class GameService {
       ? this.FIFTY_FIFTY_TOP
       : this.FIFTY_FIFTY_DEFAULT;
 
-    console.log(isUserInLeaderboard, maxFiftyFifty, fiftyFiftyUses);
     return maxFiftyFifty - fiftyFiftyUses;
   }
 
@@ -230,13 +229,15 @@ export class GameService {
     }
   }
 
-  private async findNextCategoryAndCorrectWord(gameId: string, gameCategoryIds: string[]): Promise<{ nextCategory: Category, correctWord: Word }> {
+  private async findNextCategoryAndCorrectWord(
+    gameId: string,
+    gameCategoryIds: string[],
+  ): Promise<{ nextCategory: Category; correctWord: Word }> {
     const nextCategory = sample(
       (await this.categoryService.findAll()).filter((c) => gameCategoryIds.includes(c.id)),
     );
 
-    const correctWords = (
-      (await this.prismaService.$queryRaw`
+    const correctWords = (await this.prismaService.$queryRaw`
       SELECT
         w.id,
         w.text
@@ -246,8 +247,7 @@ export class GameService {
         "categoryId"=${nextCategory.id}
         AND id not in (SELECT "B" FROM "_GameToWord" WHERE "A"=${gameId})
       ORDER BY random() limit 1;
-    `) as { id: string; text: string }[]
-    );
+    `) as { id: string; text: string }[];
 
     if (correctWords.length > 0) {
       return { nextCategory, correctWord: correctWords[0] };
