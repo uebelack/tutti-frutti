@@ -48,13 +48,13 @@ export class UserService {
         },
         update: {
           email: data.email,
-          name: 'data.name',
+          name: data.name,
           picture: data.picture,
         },
         create: {
           auth0,
           email: data.email,
-          name: 'data.name',
+          name: data.name,
           picture: data.picture,
         },
       });
