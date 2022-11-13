@@ -42,19 +42,21 @@ export class UserService {
         })),
       ) as { data: Auth0User };
 
+      const name = data.name && data.name !== '' ? data.name : data.email.split('@')[0];
+
       await this.prisma.user.upsert({
         where: {
           auth0,
         },
         update: {
           email: data.email,
-          name: data.name,
+          name,
           picture: data.picture,
         },
         create: {
           auth0,
           email: data.email,
-          name: data.name,
+          name,
           picture: data.picture,
         },
       });
