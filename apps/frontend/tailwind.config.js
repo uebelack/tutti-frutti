@@ -38,6 +38,8 @@ module.exports = {
         black: '#000000',
         white: '#ffffff',
         'off-white': '#f4f4f6',
+        warning: '#FFB800',
+        error: '#F10000',
       },
       fontFamily: {
         sans: ['Roboto', ...defaultTheme.fontFamily.sans],

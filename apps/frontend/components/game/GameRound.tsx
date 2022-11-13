@@ -5,18 +5,6 @@ import { GameType } from '../../types';
 
 const getNthAlphabetLetter = (n: number) => String.fromCharCode(65 + n);
 
-const MessageBar = ({ round }: { round: GameType }): JSX.Element => (
-  <div className="bg-primary-95 text-2xl border-t-6 border-b-6 border-white">
-    <div className="container mx-auto py-4 flex justify-between items-center">
-      <div>30 seconds</div>
-      <div>Question {round.round + 1}</div>
-      <div>Score {round.score}</div>
-      <div>Mute</div>
-      <div>End game</div>
-    </div>
-  </div>
-);
-
 interface Props {
   round: GameType;
 
@@ -36,8 +24,12 @@ const GameRound = ({
   const fiftyFiftyUsed = round.words.some((w) => w.fiftyFiftyWrong);
 
   return (
-    <Popup isOpen={true} onClose={() => {}} className="!p-8 max-w-lg w-full">
-      {/* <MessageBar round={round} /> */}
+    <Popup
+      isOpen={true}
+      onClose={() => {}}
+      className="!p-8 max-w-lg w-full"
+      overlayClassName="!bg-opacity-0"
+    >
       <div className="text-center mb-16 text-body-md text-secondary-60 flex flex-wrap items-center gap-5 justify-center">
         <p className="font-bold">Categories:</p>
         {round.categories.map((category) => (
