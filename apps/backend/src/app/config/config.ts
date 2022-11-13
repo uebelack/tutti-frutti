@@ -8,7 +8,7 @@ function int(env: string, def: number): number {
 export default () => ({
   game: {
     wordsPerRound: int(process.env.TUTTI_FRUTTI_WORDS_PER_ROUND, 4),
-    timeLimitInSeconds: int(process.env.TUTTI_FRUTTI_TIME_LIMIT_IN_SECONDS, 60),
+    timeLimitInSeconds: int(process.env.TUTTI_FRUTTI_TIME_LIMIT_IN_SECONDS, 30),
     correctAnswerPoints: int(
       process.env.TUTTI_FRUTTI_CORRECT_ANSWER_POINTS,
       10
