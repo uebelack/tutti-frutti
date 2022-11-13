@@ -7,16 +7,16 @@ export class LeaderboardService {
   constructor(private readonly prisma: PrismaService) {}
 
   async calculateLeaderboard(): Promise<LeaderboardEntry[]> {
-    const result = await this.prisma.$queryRaw`
+    const result = (await this.prisma.$queryRaw`
     SELECT ROW_NUMBER() OVER (ORDER BY score DESC) AS place, l.* FROM (
-      SELECT 
+      SELECT
         u.id,
         u.name,
         u.picture,
         sum(g.score) as score
-      FROM 
+      FROM
         "User" AS u,
-        "Game" AS g 
+        "Game" AS g
       WHERE
         u.id=g."userId"
       GROUP BY
@@ -26,7 +26,13 @@ export class LeaderboardService {
       ORDER BY score DESC
       LIMIT 10
     ) AS l
-    ` as { place: number; id: string; name: string; picture: string; score: number }[];
+    `) as {
+      place: number;
+      id: string;
+      name: string;
+      picture: string;
+      score: number;
+    }[];
 
     return result.map((row) => ({
       place: parseInt(row.place.toString(), 10),
@@ -40,15 +46,15 @@ export class LeaderboardService {
   }
 
   async isUserInLeaderboard(auth0: string): Promise<boolean> {
-    const result = await this.prisma.$queryRaw`
+    const result = (await this.prisma.$queryRaw`
     SELECT 1 FROM (
-      SELECT 
+      SELECT
         u.id,
         u.auth0,
         sum(g.score) as score
-      FROM 
+      FROM
         "User" AS u,
-        "Game" AS g 
+        "Game" AS g
       WHERE
         u.id=g."userId"
       GROUP BY
@@ -57,7 +63,7 @@ export class LeaderboardService {
       LIMIT 10
     ) AS l
     WHERE l.auth0 = ${auth0}
-    ` as [];
+    `) as [];
 
     return result.length > 0;
   }

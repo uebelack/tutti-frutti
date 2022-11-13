@@ -19,3 +19,8 @@ export interface GameType {
   score: number;
   words: Word[];
 }
+
+export interface GameResults {
+  id: string;
+  score: number;
+}

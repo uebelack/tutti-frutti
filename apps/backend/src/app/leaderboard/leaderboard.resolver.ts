@@ -1,9 +1,7 @@
 /* eslint-disable arrow-parens */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import {
-  Query, Resolver,
-} from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { LeaderboardEntry } from '../entities/leaderboard-entry.entity';

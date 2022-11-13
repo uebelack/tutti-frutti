@@ -1,5 +1,5 @@
 import {
-  Args, Context, Mutation, Resolver, Query,
+  Args, Context, Mutation, Query, Resolver,
 } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GameService } from './game.service';
@@ -29,10 +29,7 @@ export class GameResolver {
   @Args('answerRoundInput') answerRoundInput: AnswerRoundInput,
     @Context() context: GraphQLContext,
   ) {
-    return this.gameService.answerRound(
-      context.req.user.sub,
-      answerRoundInput,
-    );
+    return this.gameService.answerRound(context.req.user.sub, answerRoundInput);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -58,10 +55,10 @@ export class GameResolver {
 
   @UseGuards(JwtAuthGuard)
   @Query(() => Game)
-  game(
+  gameResults(
   @Args('gameId') gameId: string,
     @Context() context: GraphQLContext,
   ) {
-    return this.gameService.findGame(context.req.user.sub, gameId);
+    return this.gameService.getResultsForGame(context.req.user.sub, gameId);
   }
 }

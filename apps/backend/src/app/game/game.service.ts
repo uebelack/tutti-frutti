@@ -15,6 +15,7 @@ import { AnswerRoundInput } from './dto/answer-round.input';
 import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 import { LeaderboardService } from '../leaderboard/leaderboard.service';
 import { CategoryService } from '../category/category.service';
+import { GameResults } from '../entities/game-results.entity';
 
 @Injectable()
 export class GameService {
@@ -198,7 +199,16 @@ export class GameService {
     };
   }
 
-  async findGame(auth0Id: string, gameId: string) {
+  async getResultsForGame(auth0: string, gameId: string): Promise<GameResults> {
+    const game = await this.findGame(auth0, gameId);
+
+    return {
+      id: game.id,
+      score: game.score,
+    };
+  }
+
+  private async findGame(auth0Id: string, gameId: string) {
     const game = await this.prismaService.game.findFirst({
       where: {
         id: gameId,

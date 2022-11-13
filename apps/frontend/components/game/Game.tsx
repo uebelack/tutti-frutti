@@ -54,7 +54,7 @@ const Game = (): JSX.Element => {
       },
     });
 
-    if (currentRound.data.createGame) {
+    if (currentRound.data?.createGame) {
       setRound(currentRound.data.createGame);
     }
   };
@@ -75,7 +75,9 @@ const Game = (): JSX.Element => {
 
   const onSkipRound = async () => {
     const currentRound = await skipRound({ variables: { gameId: round.id } });
-    setRound(currentRound.data.skipRound);
+    if (currentRound.data?.skipRound) {
+      setRound(currentRound.data.skipRound);
+    }
   };
 
   const onFiftyFifty = async () => {

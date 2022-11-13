@@ -94,7 +94,7 @@ type Mutation {
 
 type Query {
   categories: [Category!]!
-  game(gameId: String!): Game!
+  gameResults(gameId: String!): Game!
   leaderboard: [LeaderboardEntry!]!
 }
 
