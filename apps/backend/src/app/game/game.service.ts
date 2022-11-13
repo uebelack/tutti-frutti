@@ -333,7 +333,7 @@ export class GameService {
     const character = correctWord.text.charAt(0);
 
     const incorrectWords = await this.findNextIncorrectWords(
-      correctWord.id,
+      correctWord.category.id,
       character
     );
 
