@@ -278,6 +278,8 @@ export class GameService {
     gameId: string,
   ): Promise<{
       categoryName: string;
+      categoryDescription: string;
+      character: string;
       words: Pick<Word, 'id' | 'text'>[];
     }> {
     const game = await this.findGame(auth0Id, gameId);
@@ -322,6 +324,8 @@ export class GameService {
 
     return {
       categoryName: nextCategory.name,
+      categoryDescription: nextCategory.description,
+      character,
       words: shuffle([correctWord, ...incorrectWords]),
     };
   }

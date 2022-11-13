@@ -38,6 +38,10 @@ const GameRound = ({
       <MessageBar round={round} />
       <div className="w-3/4 md:w-1/2 max-w-[350px] mx-auto flex flex-col gap-16">
         <h3>Category: {round.categoryName}</h3>
+        <div className="flex">
+          <div className="text-7xl mr-5">{round.character}</div>
+          <p dangerouslySetInnerHTML={{ __html: round.categoryDescription.replace('{0}', `<strong>${round.character}</strong>`) }}></p>
+        </div>
         <div className="flex flex-col gap-8">
           {round.words.map((word, i) => (
             <Button

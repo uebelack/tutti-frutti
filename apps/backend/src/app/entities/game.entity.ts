@@ -23,6 +23,16 @@ export class Game {
   })
     categoryName: string;
 
+  @Field(() => String, {
+    description: 'Category description selected for current round',
+  })
+    categoryDescription: string;
+
+  @Field(() => String, {
+    description: 'Current character selected for current round',
+  })
+    character: string;
+
   @Field(() => [Word], { description: 'Current round words' })
     words: Word[];
 

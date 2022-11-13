@@ -46,8 +46,14 @@ type Game {
   """All categories selected in game"""
   categories: [Category!]!
 
+  """Category description selected for current round"""
+  categoryDescription: String!
+
   """Category name selected for current round"""
   categoryName: String!
+
+  """Current character selected for current round"""
+  character: String!
 
   """Created At"""
   createdAt: DateTime!
