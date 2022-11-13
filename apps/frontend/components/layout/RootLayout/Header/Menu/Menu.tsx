@@ -28,7 +28,7 @@ import {
   WhatsappIcon,
   WhatsappShareButton,
 } from 'react-share';
-import { Button, IconButton } from 'UI';
+import { Button, ComingSoon, IconButton } from 'UI';
 import MenuButton from './MenuButton';
 
 export interface MenuProps {
@@ -96,10 +96,10 @@ const MenuContent = ({ closeMenu }: MenuProps) => {
         <div className="shrink-0 mr-4">
           <p className="text-body-lg">{user.name}</p>
           <p className="text-label-sm">Username: {user.nickname}</p>
-          <p className="text-label-sm">Top Score: 300 points</p>
+          {/* <p className="text-label-sm">Top Score: 300 points</p> */}
         </div>
         <IconButton
-          className="w-10 lg:w-8 ml-auto lg:ml-0 text-current hover:!bg-blue hover:!bg-opacity-10"
+          className="w-10 lg:w-8 ml-auto lg:ml-0 !text-current hover:!bg-blue hover:!bg-opacity-10"
           onClick={() => {
             window.navigator.clipboard.writeText(user.nickname).then(() => {
               setCopied(true);
@@ -143,7 +143,7 @@ const MenuContent = ({ closeMenu }: MenuProps) => {
         <div>
           <Button
             color="white"
-            className="bg-transparent hover:bg-blue hover:bg-opacity-10 flex items-center gap-3 text-left justify-start !px-4 !rounded-none !w-full"
+            className="bg-transparent hover:!bg-blue hover:!bg-opacity-10 flex items-center gap-3 text-left justify-start !px-4 !rounded-none !w-full"
             ref={shareAnchorRef}
             onClick={() => setOpenShare(true)}
           >
@@ -193,30 +193,40 @@ const MenuContent = ({ closeMenu }: MenuProps) => {
           </Drawer>
         </div>
 
-        <MenuButton
-          Icon={HistoryIcon}
-          content="History"
-          link="/history"
-          onClick={closeMenu}
-        />
-        <MenuButton
-          Icon={AwardIcon}
-          content="Achievements"
-          link="/achievements"
-          onClick={closeMenu}
-        />
-        <MenuButton
-          Icon={SettingsIcon}
-          content="Settings"
-          link="/settings"
-          onClick={closeMenu}
-        />
-        <MenuButton
-          Icon={InfoCircleIcon}
-          content="About Tutti Frutti"
-          link="/about"
-          onClick={closeMenu}
-        />
+        <ComingSoon>
+          <MenuButton
+            Icon={HistoryIcon}
+            content="History"
+            link="/history"
+            onClick={closeMenu}
+            disabled
+          />
+        </ComingSoon>
+        <ComingSoon>
+          <MenuButton
+            Icon={AwardIcon}
+            content="Achievements"
+            link="/achievements"
+            onClick={closeMenu}
+          />
+        </ComingSoon>
+        <ComingSoon>
+          <MenuButton
+            Icon={SettingsIcon}
+            content="Settings"
+            link="/settings"
+            onClick={closeMenu}
+          />
+        </ComingSoon>
+        <ComingSoon>
+          <MenuButton
+            Icon={InfoCircleIcon}
+            content="About Tutti Frutti"
+            link="/about"
+            onClick={closeMenu}
+            className="lg:w-[30ch]"
+          />
+        </ComingSoon>
         <MenuButton
           Icon={LogoutIcon}
           content="Logout"
