@@ -10,13 +10,11 @@ const Home = () => {
       <Button
         color="white"
         className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
+        // @ts-ignore
         Component={Link}
         // @ts-ignore
         href="/game"
         onClick={() => playConfirmSfx()}
-        // onClick={() => {
-        //   window.sessionStorage.setItem('mode', 'single');
-        // }}
       >
         Quick Play
       </Button>
@@ -29,7 +27,9 @@ const Home = () => {
       <Button
         color="white"
         className="text-title-lg hover:!bg-white hover:!bg-opacity-80"
+        // @ts-ignore
         Component={Link}
+        // @ts-ignore
         href="/tutorial"
       >
         Tutorial
