@@ -20,6 +20,9 @@ import { AuthModule } from './auth/auth.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      subscriptions: {
+        'graphql-ws': true,
+      },
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     HttpModule,

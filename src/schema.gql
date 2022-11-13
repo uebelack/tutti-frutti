@@ -98,6 +98,10 @@ type Query {
   leaderboard: [LeaderboardEntry!]!
 }
 
+type Subscription {
+  lounge(gameId: String!): Game!
+}
+
 type User {
   """User ID"""
   id: String!
