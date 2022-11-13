@@ -12,3 +12,7 @@ export { ReactComponent as MenuIcon } from './icons/Menu.svg';
 export { ReactComponent as SettingsIcon } from './icons/Settings.svg';
 export { ReactComponent as ShareIcon } from './icons/Share.svg';
 export { ReactComponent as ShrinkIcon } from './icons/Shrink.svg';
+export { ReactComponent as ClockIcon } from './icons/Clock.svg';
+export { ReactComponent as CoinIcon } from './icons/Coin.svg';
+export { ReactComponent as VolumeIcon } from './icons/Volume.svg';
+export { ReactComponent as MessageIcon } from './icons/Message.svg';

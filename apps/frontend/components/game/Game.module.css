@@ -1,0 +1,7 @@
+.badge {
+  @apply flex items-center select-none;
+}
+
+.badge svg {
+  @apply h-6 mr-1.5;
+}
