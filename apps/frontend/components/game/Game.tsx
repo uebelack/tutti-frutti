@@ -25,11 +25,15 @@ const Score = ({ round }: { round: GameType }): JSX.Element => {
   useEffect(() => {
     if (typeof round.previousRoundCorrect !== 'boolean') return;
     (async () => {
-      controls.stop();
       await controls.start({
-        scale: 2,
+        scale: 2.4,
         opacity: 0,
         color: round.previousRoundCorrect ? 'green' : 'red',
+      });
+      controls.set({
+        scale: 1,
+        opacity: 1,
+        color: 'unset',
       });
     })();
   }, [controls, round]);
