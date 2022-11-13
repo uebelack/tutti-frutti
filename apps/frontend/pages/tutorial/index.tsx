@@ -1,17 +1,26 @@
 export const Login = () => (
   <article className="prose">
-      <h1>Tutorial</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id malesuada lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          In ac hendrerit quam. Nulla facilisi. Nam venenatis dictum neque eu semper. Morbi elementum orci sed leo cursus, sit amet auctor urna rutrum.
-          Aenean vel eros condimentum, mollis orci ac, tincidunt orci.
-          Donec risus metus, mollis eleifend libero vitae, vehicula bibendum eros. Curabitur tristique, ipsum sit amet luctus dapibus, elit sem rhoncus augue,
-           non malesuada felis magna sed orci. Integer ut augue nec nulla blandit placerat non a nunc. Phasellus vehicula, tortor non porta scelerisque, ipsum nisi tempus velit</p>
-        <p>Praesent venenatis, nisl id convallis laoreet, nunc lectus lacinia lorem, ac pretium augue orci et libero. Quisque et consequat tellus.
-          Donec viverra blandit tortor, sed congue felis semper et. Praesent mattis nibh tempus odio auctor faucibus. Mauris orci ipsum, viverra vitae tempus ac,
-          molestie vel tellus.</p>
-        <p>Nullam ultrices nisi erat, vel bibendum arcu dignissim sit amet. Nunc blandit lacinia orci eget porttitor. Quisque ultrices tempor ultrices.
-          Phasellus quis aliquam libero, sed ultricies nisl. Nullam vulputate, massa ac varius elementum, diam orci mollis urna, ut egestas leo tortor ut augue. </p>
-    </article>
-  );
+    <h1>Tutorial</h1>
+    <h2>What is the game Tutti Frutti?</h2>
+    <p>Tutti Frutti is a creative fun  category game you can play on your own or with up to four other people.
+      The original version is very popular in Argentina and all Latin American countries, but is played all around
+      the world under different names: In France, it is known as &apos;Le jeu du baccalauréat&apos;, German speaking people
+      call it &apos;City, Country, River&apos; and in English speaking countries, it is known as &apos;Scattergories&apos;, &apos;Tutti Frutti&apos;
+      or &apos;Stop the Bus&apos; depending on the version being played. </p>
+
+    <h2>Tutti Frutti Game Instructions</h2>
+    <h3>How do you play Tutti Frutti?</h3>
+    <p>This game is about how fast you can choose the right word for a randomly selected category and a starting letter.
+      Each game lasts 30 seconds and the goal is to play as many rounds as possible. The more words you choose correctly, the more points you get.</p>
+
+    <h3>How does the 50:50 Lifeline work?</h3>
+    <p>You can click on the 50:50 button if you get stuck to eliminate 50% of the wrong answers. But keep in mind that for every game you can use the 50:50 lifeline only ones.
+      Unless you are among the top 10 in the ranking, then you are allowed to use the 50:50 lifeline even twice.</p>
+
+    <h3>How are points counted?</h3>
+    <p>For every right answer you get 10 points, for every wrong answer you lose 20 points. If you don&apos;t know the answer for sure,
+      it might make more sense to skip the round with the skip button.</p>
+  </article>
+);
 
 export default Login;
