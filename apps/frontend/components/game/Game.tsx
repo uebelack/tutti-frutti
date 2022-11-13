@@ -1,17 +1,20 @@
 import { useMutation } from '@apollo/client';
-import { useState } from 'react';
 import useSound from 'use-sound';
 import { Errors } from '@toptal-hackathon-t2/types';
 import { pick } from 'next/dist/lib/pick';
 import { useRouter } from 'next/router';
-import CategoriesSelect from './CategoriesSelect';
-import GameRound from './GameRound';
-import { AnswerRoundInput, CreateGameInput, GameType } from '../../types';
+import { useMemo, useState } from 'react';
+import Countdown, { zeroPad } from 'react-countdown';
+import cn from 'classnames';
 import { ANSWER_ROUND } from '../../graphql/mutations/answer-round.mutation';
 import { CREATE_GAME } from '../../graphql/mutations/create-game.mutation';
 import { SKIP_ROUND } from '../../graphql/mutations/skip-round.mutation';
 import { USE_FIFTY_FIFTY } from '../../graphql/mutations/use-fifty-fifty';
+import { AnswerRoundInput, CreateGameInput, GameType } from '../../types';
 import { FiftyFiftyInput } from '../../types/fifty-fifty-input';
+import { useRootContext } from '../providers/RootLayoutProvider';
+import CategoriesSelect from './CategoriesSelect';
+import GameRound from './GameRound';
 
 const Game = (): JSX.Element => {
   const [playSuccessSfx] = useSound('/sounds/success.mp3');
@@ -19,6 +22,12 @@ const Game = (): JSX.Element => {
 
   const router = useRouter();
   const [round, setRound] = useState<GameType>();
+  const [startTime, setStartTime] = useState(0);
+  const [currentTick, setCurrentTick] = useState(30);
+
+  const { setShowHeader } = useRootContext();
+
+  const barPercent = useMemo(() => (currentTick / 30) * 100, [currentTick]);
 
   const mutationsOptions = {
     onCompleted: (data) => {
@@ -68,6 +77,8 @@ const Game = (): JSX.Element => {
 
     if (currentRound.data?.createGame) {
       setRound(currentRound.data.createGame);
+      setStartTime(Date.now());
+      setShowHeader(false);
     }
   };
 
@@ -109,12 +120,61 @@ const Game = (): JSX.Element => {
   return !round ? (
     <CategoriesSelect onSelect={onSelectCategories} />
   ) : (
-    <GameRound
-      round={round}
-      onSelect={onAnswerRound}
-      onSkip={onSkipRound}
-      onFiftyFifty={onFiftyFifty}
-    />
+    <>
+      <div className="bg-white text-title-lg fixed top-0 left-0 w-full text-black z-50">
+        <div className="container mx-auto py-4 flex justify-between items-center">
+          <Countdown
+            date={startTime + 30000}
+            renderer={({ seconds }) => (
+              <span>{zeroPad(seconds)} seconds left</span>
+            )}
+            onTick={({ seconds, completed }) => {
+              if (completed) {
+                setShowHeader(true);
+                router.push(`/results/${round.id}`);
+              } else {
+                setCurrentTick(seconds);
+              }
+            }}
+          />
+          <div>Score {round.score}</div>
+          <div>Question {round.round + 1}</div>
+          {/* <div>End game</div> */}
+        </div>
+        <span
+          className={cn(
+            'absolute top-2 left-0 bottom-2 opacity-10 w-full origin-left transition-[transform,_background-color] ease-linear duration-1000',
+            {
+              'bg-primary-50': barPercent > 25,
+              'bg-warning': barPercent > 10 && barPercent <= 25,
+              'bg-error': barPercent <= 10,
+            }
+          )}
+          style={{
+            transform: `scaleX(${barPercent}%)`,
+          }}
+        />
+        <span
+          className={cn(
+            'absolute -bottom-2 left-0 w-full h-2 origin-left transition-[transform,background-color] ease-linear duration-1000',
+            {
+              'bg-primary-50': barPercent > 25,
+              'bg-warning': barPercent > 10 && barPercent <= 25,
+              'bg-error': barPercent <= 10,
+            }
+          )}
+          style={{
+            transform: `scaleX(${barPercent}%)`,
+          }}
+        />
+      </div>
+      <GameRound
+        round={round}
+        onSelect={onAnswerRound}
+        onSkip={onSkipRound}
+        onFiftyFifty={onFiftyFifty}
+      />
+    </>
   );
 };
 

@@ -4,16 +4,16 @@
 import { Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { LeaderboardEntry } from '../entities/leaderboard-entry.entity';
+import { LeaderboardEntryEntity } from '../entities/leaderboard-entry.entity';
 import { LeaderboardService } from './leaderboard.service';
 
-@Resolver(() => LeaderboardEntry)
+@Resolver(() => LeaderboardEntryEntity)
 export class LeaderboardResolver {
   constructor(private readonly leaderboardService: LeaderboardService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Query(() => [LeaderboardEntry])
-  leaderboard(): Promise<LeaderboardEntry[]> {
+  @Query(() => [LeaderboardEntryEntity])
+  leaderboard(): Promise<LeaderboardEntryEntity[]> {
     return this.leaderboardService.calculateLeaderboard();
   }
 }

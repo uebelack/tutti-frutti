@@ -44,6 +44,8 @@ export const Popup = ({
       )}
       shouldCloseOnEsc={false}
       shouldCloseOnOverlayClick={false}
+      // @ts-ignore
+      appElement={document.querySelector('.app')}
     >
       <div>{children}</div>
     </ReactModal>

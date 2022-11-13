@@ -3,38 +3,69 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { sample, sampleSize, shuffle } from 'lodash';
+import * as prisma from '@prisma/client';
+import { maxBy, shuffle } from 'lodash';
 import { Errors } from '@toptal-hackathon-t2/types';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateGameInput } from './dto/create-game.input';
-import { Game } from '../entities/game.entity';
-import { Word } from '../entities/word.entity';
-import { Category } from '../entities/category.entity';
+import { GameEntity } from '../entities/game.entity';
+import { WordEntity } from '../entities/word.entity';
 
 import { AnswerRoundInput } from './dto/answer-round.input';
-import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 import { LeaderboardService } from '../leaderboard/leaderboard.service';
 import { CategoryService } from '../category/category.service';
-import { GameResults } from '../entities/game-results.entity';
+import { GameResultsEntity } from '../entities/game-results.entity';
+import { FiftyFiftyInput } from './dto/fifty-fifty.input';
 import { GameConfig } from '../config/game-config.type';
+
+interface RawWord {
+  word_id: string;
+  word_text: string;
+  category_id: string;
+  category_name: string;
+  category_description: string;
+}
+
+type MappedWord = Pick<prisma.Word, 'id' | 'text'> & {
+  category: Pick<prisma.Category, 'id' | 'name' | 'description'>;
+};
+
+// IMP move to separate mapper file
+const wordMapper = (word: RawWord): MappedWord => ({
+  id: word.word_id,
+  text: word.word_text,
+  category: {
+    id: word.category_id,
+    name: word.category_name,
+    description: word.category_description,
+  },
+});
+
+interface WordAndCategory {
+  categoryName: string;
+  categoryDescription: string;
+  character: string;
+  words: Pick<WordEntity, 'id' | 'text'>[];
+}
 
 @Injectable()
 export class GameService {
   private readonly config: GameConfig;
+
   constructor(
     private readonly prismaService: PrismaService,
     private leaderboardService: LeaderboardService,
     private categoryService: CategoryService,
-    private configService: ConfigService,
+    private configService: ConfigService
   ) {
     this.config = configService.get('game');
   }
 
   async startGame(
     auth0Id: string,
-    createGameInput: CreateGameInput,
-  ): Promise<Game> {
+    createGameInput: CreateGameInput
+  ): Promise<GameEntity> {
     const game = await this.prismaService.game.create({
       data: {
         user: {
@@ -48,32 +79,28 @@ export class GameService {
       },
       include: {
         categories: true,
-        words: true,
+        rounds: {
+          include: {
+            correctWord: true,
+          },
+        },
       },
     });
 
-    const round = await this.getWordsAndCategoryForRound(auth0Id, game.id);
+    const round = await this.getWordsAndCategoryForRound(game);
 
-    return {
-      ...game,
-      ...round,
-      round: game.words.length,
-      fiftyFiftyUsesLeft: await this.getFiftyFiftyUsesLeft(
-        auth0Id,
-        game.fiftyFiftyUses,
-      ),
-      timeLimit: this.config.timeLimitInSeconds,
-    };
+    return this.getGameFields(auth0Id, game, round);
   }
 
   async answerRound(
     auth0Id: string,
-    answerRoundInput: AnswerRoundInput,
-  ): Promise<Game> {
+    answerRoundInput: AnswerRoundInput
+  ): Promise<GameEntity> {
     const game = await this.findGame(auth0Id, answerRoundInput.gameId);
     this.checkForTimeout(game);
 
-    const isCorrect = game.lastWord?.id === answerRoundInput.wordId;
+    const lastRound = maxBy(game.rounds, 'index');
+    const isCorrect = lastRound.correctWord?.id === answerRoundInput.wordId;
 
     const updatedGame = await this.prismaService.game.update({
       where: {
@@ -88,29 +115,23 @@ export class GameService {
       },
       include: {
         categories: true,
-        words: true,
+        rounds: {
+          include: {
+            correctWord: true,
+          },
+        },
       },
     });
 
-    const round = await this.getWordsAndCategoryForRound(auth0Id, game.id);
+    const round = await this.getWordsAndCategoryForRound(game);
 
-    return {
-      ...updatedGame,
-      ...round,
-      round: updatedGame.words.length,
-      previousRoundCorrect: isCorrect,
-      fiftyFiftyUsesLeft: await this.getFiftyFiftyUsesLeft(
-        auth0Id,
-        game.fiftyFiftyUses,
-      ),
-      timeLimit: this.config.timeLimitInSeconds,
-    };
+    return this.getGameFields(auth0Id, updatedGame, round);
   }
 
   async useFiftyFifty(
     auth0Id: string,
-    fiftyFiftyInput: FiftyFiftyInput,
-  ): Promise<Game> {
+    fiftyFiftyInput: FiftyFiftyInput
+  ): Promise<GameEntity> {
     const game = await this.findGame(auth0Id, fiftyFiftyInput.gameId);
     this.checkForTimeout(game);
 
@@ -118,17 +139,11 @@ export class GameService {
       throw new ConflictException(Errors.NO_MORE_50_50);
     }
 
-    // IMP CACHE for performance?
-    const currentCategory = await this.prismaService.category.findFirst({
-      where: {
-        id: game.lastWord.categoryId,
-      },
-    });
+    const lastRound = maxBy(game.rounds, 'index');
+    const character = lastRound.correctWord.text.charAt(0);
 
     const incorrectWordIdsToShow = shuffle(
-      fiftyFiftyInput.words
-        .map((word) => word.id)
-        .filter((id) => id !== game.lastWord.id),
+      lastRound.incorrectWords.map((i) => i.id)
     ).slice(0, Math.floor(this.config.wordsPerRound / 2));
 
     await this.prismaService.game.update({
@@ -142,29 +157,22 @@ export class GameService {
       },
     });
 
-    return {
-      ...game,
-      categoryName: currentCategory.name,
-      categoryDescription: currentCategory.description,
-      character: currentCategory.name.charAt(0),
+    return this.getGameFields(auth0Id, game, {
+      categoryName: lastRound.correctWord.category.name,
+      categoryDescription: lastRound.correctWord.category.description,
+      character,
       words: fiftyFiftyInput.words.map((word) => ({
         ...word,
         fiftyFiftyWrong: incorrectWordIdsToShow.indexOf(word.id) !== -1,
       })),
-      round: game.words.length,
-      fiftyFiftyUsesLeft: await this.getFiftyFiftyUsesLeft(
-        auth0Id,
-        game.fiftyFiftyUses,
-      ),
-      timeLimit: this.config.timeLimitInSeconds,
-    };
+    });
   }
 
-  async skipRound(auth0Id: string, gameId: string): Promise<Game> {
+  async skipRound(auth0Id: string, gameId: string): Promise<GameEntity> {
     const game = await this.findGame(auth0Id, gameId);
     this.checkForTimeout(game);
 
-    if (game.timesSkipped >= this.config.maxSkipRounds) {
+    if (game.skipUses >= this.config.maxSkipRounds) {
       throw new ConflictException(Errors.NO_MORE_SKIPS);
     }
 
@@ -173,27 +181,21 @@ export class GameService {
         id: game.id,
       },
       data: {
-        timesSkipped: {
+        skipUses: {
           increment: 1,
         },
       },
     });
 
-    const round = await this.getWordsAndCategoryForRound(auth0Id, game.id);
+    const round = await this.getWordsAndCategoryForRound(game);
 
-    return {
-      ...game,
-      ...round,
-      round: game.words.length,
-      fiftyFiftyUsesLeft: await this.getFiftyFiftyUsesLeft(
-        auth0Id,
-        game.fiftyFiftyUses,
-      ),
-      timeLimit: this.config.timeLimitInSeconds,
-    };
+    return this.getGameFields(auth0Id, game, round);
   }
 
-  async getResultsForGame(auth0: string, gameId: string): Promise<GameResults> {
+  async getResultsForGame(
+    auth0: string,
+    gameId: string
+  ): Promise<GameResultsEntity> {
     const game = await this.findGame(auth0, gameId);
 
     return {
@@ -202,7 +204,22 @@ export class GameService {
     };
   }
 
-  private async findGame(auth0Id: string, gameId: string) {
+  private async findGame(
+    auth0Id: string,
+    gameId: string
+  ): Promise<
+    prisma.Game & {
+      categories: prisma.Category[];
+      rounds: (prisma.Round & {
+        correctWord: prisma.Word & {
+          category: prisma.Category;
+        };
+        incorrectWords: (prisma.Word & {
+          fiftyFiftyWrong?: boolean;
+        })[];
+      })[];
+    }
+    > {
     const game = await this.prismaService.game.findFirst({
       where: {
         id: gameId,
@@ -212,8 +229,16 @@ export class GameService {
       },
       include: {
         categories: true,
-        words: true,
-        lastWord: true,
+        rounds: {
+          include: {
+            incorrectWords: true,
+            correctWord: {
+              include: {
+                category: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -224,15 +249,6 @@ export class GameService {
     return game;
   }
 
-  private async getFiftyFiftyUsesLeft(auth0Id: string, fiftyFiftyUses: number) {
-    const isUserInLeaderboard = await this.leaderboardService.isUserInLeaderboard(auth0Id);
-    const maxFiftyFifty = isUserInLeaderboard
-      ? this.config.fiftyFiftyDefault
-      : this.config.fiftyFiftyTop;
-
-    return maxFiftyFifty - fiftyFiftyUses;
-  }
-
   private checkForTimeout(game: { createdAt: Date }) {
     const timeSinceStart = Date.now() - game.createdAt.getTime();
     if (timeSinceStart > this.config.timeLimitInSeconds * 1e3) {
@@ -240,62 +256,82 @@ export class GameService {
     }
   }
 
-  private async findNextCategoryAndCorrectWord(
-    gameId: string,
-    gameCategoryIds: string[],
-  ): Promise<{ nextCategory: Category; correctWord: Word }> {
-    const nextCategory = sample(
-      (await this.categoryService.findAll()).filter((c) => gameCategoryIds.includes(c.id)),
-    );
-
-    const correctWords = (await this.prismaService.$queryRaw`
+  private async findNextCorrectWord(
+    categoryIds: string[],
+    usedWordIds: string[]
+  ): Promise<MappedWord> {
+    const [row] = await this.prismaService.$queryRaw<RawWord[]>`
       SELECT
-        w.id,
-        w.text
+        w.id as "word_id",
+        w.text as "word_text",
+        c.id as "category_id",
+        c.name as "category_name",
+        c.description as "category_description"
       FROM
         "Word" as w
+      LEFT JOIN "Category" as c
+        ON w."categoryId" = c.id
       WHERE
-        "categoryId"=${nextCategory.id}
-        AND id not in (SELECT "B" FROM "_GameToWord" WHERE "A"=${gameId})
+        "categoryId" in (${prisma.Prisma.join(categoryIds)})
+        ${
+  usedWordIds.length > 0
+    ? prisma.Prisma.sql`AND w.id not in (${prisma.Prisma.join(
+      usedWordIds
+    )})`
+    : prisma.Prisma.empty
+}
       ORDER BY random() limit 1;
-    `) as { id: string; text: string }[];
+    `;
+    return wordMapper(row);
+  }
 
-    if (correctWords.length > 0) {
-      return { nextCategory, correctWord: correctWords[0] };
-    }
-
-    return this.findNextCategoryAndCorrectWord(gameId, gameCategoryIds);
+  private async findNextIncorrectWords(
+    categoryId: string,
+    firstLetter: string
+  ): Promise<MappedWord[]> {
+    const rows = await this.prismaService.$queryRawUnsafe<RawWord[]>(
+      `
+      SELECT
+        w.id as "word_id",
+        w.text as "word_text",
+        c.id as "category_id",
+        c.name as "category_name",
+        c.description as "category_description"
+      FROM
+        "Word" as w
+      LEFT JOIN "Category" as c
+        ON w."categoryId" = c.id
+      WHERE
+        "categoryId" <> '$1'
+        AND text ILIKE $2
+      ORDER BY random() limit $3;
+    `,
+      categoryId,
+      `${firstLetter}%`,
+      this.config.wordsPerRound - 1
+    );
+    return rows.map(wordMapper);
   }
 
   private async getWordsAndCategoryForRound(
-    auth0Id: string,
-    gameId: string,
-  ): Promise<{
-      categoryName: string;
-      categoryDescription: string;
-      character: string;
-      words: Pick<Word, 'id' | 'text'>[];
-    }> {
-    const game = await this.findGame(auth0Id, gameId);
-    const gameCategoryIds = game.categories.map((c) => c.id);
-    const { nextCategory, correctWord } = await this.findNextCategoryAndCorrectWord(gameId, gameCategoryIds);
+    game: prisma.Game & {
+      categories: prisma.Category[];
+      rounds: (prisma.Round & {
+        correctWord: prisma.Word;
+      })[];
+    }
+  ): Promise<WordAndCategory> {
+    const categoryIds = game.categories.map((c) => c.id);
+    const usedWordIds = game.rounds.map((r) => r.correctWord.id);
+    const correctWord = await this.findNextCorrectWord(
+      categoryIds,
+      usedWordIds
+    );
     const character = correctWord.text.charAt(0);
 
-    const allIncorrectWords = await this.prismaService.word.findMany({
-      where: {
-        categoryId: {
-          not: nextCategory.id,
-        },
-        text: {
-          startsWith: character,
-          mode: 'insensitive',
-        },
-      },
-    });
-
-    const incorrectWords = sampleSize(
-      allIncorrectWords,
-      this.config.wordsPerRound - 1,
+    const incorrectWords = await this.findNextIncorrectWords(
+      correctWord.id,
+      character
     );
 
     await this.prismaService.game.update({
@@ -303,24 +339,61 @@ export class GameService {
         id: game.id,
       },
       data: {
-        words: {
-          connect: {
-            id: correctWord.id,
-          },
-        },
-        lastWord: {
-          connect: {
-            id: correctWord.id,
+        rounds: {
+          create: {
+            index: game.rounds.length,
+            correctWord: {
+              connect: {
+                id: correctWord.id,
+              },
+            },
+            incorrectWords: {
+              connect: incorrectWords.map((w) => ({ id: w.id })),
+            },
           },
         },
       },
     });
 
     return {
-      categoryName: nextCategory.name,
-      categoryDescription: nextCategory.description,
+      categoryName: correctWord.category.name,
+      categoryDescription: correctWord.category.description,
       character,
-      words: shuffle([correctWord, ...incorrectWords]),
+      words: shuffle([correctWord, ...incorrectWords]), // TODO make alphabetical order
+    };
+  }
+
+  private async getFiftyFiftyUsesLeft(
+    auth0Id: string,
+    fiftyFiftyUses: number
+  ): Promise<number> {
+    const isUserInLeaderboard = await this.leaderboardService.isUserInLeaderboard(auth0Id);
+    const maxFiftyFifty = isUserInLeaderboard
+      ? this.config.fiftyFiftyTop
+      : this.config.fiftyFiftyDefault;
+
+    return maxFiftyFifty - fiftyFiftyUses;
+  }
+
+  private async getGameFields(
+    auth0Id: string,
+    game: prisma.Game & {
+      categories: prisma.Category[];
+      rounds: prisma.Round[];
+    },
+    round: WordAndCategory
+  ): Promise<GameEntity> {
+    const fiftyFiftyUsesLeft = await this.getFiftyFiftyUsesLeft(
+      auth0Id,
+      game.fiftyFiftyUses
+    );
+
+    return {
+      ...game,
+      ...round,
+      round: game.rounds.length + 1,
+      fiftyFiftyUsesLeft,
+      timeLimit: this.config.timeLimitInSeconds,
     };
   }
 }
