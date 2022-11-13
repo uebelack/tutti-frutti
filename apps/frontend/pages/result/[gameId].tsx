@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import Confetti from 'react-confetti';
-import { Button, Loader, Popup } from 'UI';
+import { Button, IconButton, Loader, Popup } from 'UI';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { Errors } from '@toptal-hackathon-t2/types';
 import useSound from 'use-sound';
 import { motion } from 'framer-motion';
+import { CloseIcon } from 'icons';
 import SplashScreenLayout from '../../components/layout/SplashScreenLayout/SplashScreenLayout';
 import { GAME_RESULTS } from '../../graphql/queries/game-results';
 import { GameResults } from '../../types';
@@ -78,9 +79,17 @@ const Result = () => {
         motionInitial={{ opacity: 0, scale: 0.5 }}
         motionAnimate={{ opacity: 1, scale: 1 }}
         motionExit={{ opacity: 0 }}
-        className="text-center !py-10 !px-16 hidden lg:block"
+        className="text-center !py-10 !px-16 hidden lg:block relative"
         overlayClassName="hidden lg:grid"
       >
+        <IconButton
+          onClick={() => {
+            router.push('/leaderboard');
+          }}
+          className="!absolute !top-4 !right-4 w-6 !text-black hover:!bg-blue hover:!bg-opacity-10"
+        >
+          <CloseIcon className="w-1/2" />
+        </IconButton>
         {Content}
       </Popup>
       <div className="fixed inset-0 lg:hidden grid place-items-center">
@@ -88,8 +97,16 @@ const Result = () => {
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          className="!p-8 !pt-20 w-full bg-white text-black"
+          className="!p-8 !pt-20 w-full bg-white text-black relative"
         >
+          <IconButton
+            onClick={() => {
+              router.push('/leaderboard');
+            }}
+            className="!absolute !top-4 !right-4 w-6 !text-black hover:!bg-blue hover:!bg-opacity-10"
+          >
+            <CloseIcon className="w-1/2" />
+          </IconButton>
           {Content}
         </motion.div>
       </div>
