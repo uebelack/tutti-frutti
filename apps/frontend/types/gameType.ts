@@ -21,6 +21,7 @@ export interface GameType {
   score: number;
   words: Word[];
   timeLimit: number;
+  previousRoundCorrect?: boolean;
 }
 
 export interface GameResults {
