@@ -92,8 +92,8 @@ describe('GameService', () => {
       ],
     });
 
-    expect(game.words[1].fiftyFiftyWrong).toBeFalsy();
-    expect(game.words[3].fiftyFiftyWrong).toBeFalsy();
+    expect(game.words.find((w) => w.text === 'Door').fiftyFiftyWrong).toBeFalsy();
+    expect(game.words.filter((word) => !word.fiftyFiftyWrong).length).toBe(2);
     expect(game.words.filter((word) => word.fiftyFiftyWrong).length).toBe(2);
 
     expect(prisma.game.update).toHaveBeenCalledWith({
