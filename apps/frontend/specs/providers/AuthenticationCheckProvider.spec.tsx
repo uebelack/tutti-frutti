@@ -7,6 +7,7 @@ import AuthenticationCheckProvider from '../../components/providers/Authenticati
 
 jest.mock('@auth0/auth0-react', () => ({ useAuth0: jest.fn() }));
 jest.mock('next/router', () => ({ useRouter: jest.fn() }));
+jest.mock('next/image');
 
 describe('<AuthenticationCheckProvider/>', () => {
   it('should show loader', async () => {
@@ -17,7 +18,7 @@ describe('<AuthenticationCheckProvider/>', () => {
         <div>Test</div>
       </AuthenticationCheckProvider>,
     );
-    expect(await screen.findByText('loading...')).toBeInTheDocument();
+    expect(await screen.findByTestId('loader')).toBeInTheDocument();
   });
 
   it('should redirect to login', async () => {

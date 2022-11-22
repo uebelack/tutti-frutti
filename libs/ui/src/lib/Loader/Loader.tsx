@@ -6,7 +6,7 @@ export interface LoaderProps {
 }
 
 export const Loader = ({ className }: LoaderProps) => (
-  <div className={cn(s.loader, className)} />
+  <div className={cn(s.loader, className)} data-testid="loader" />
 );
 
 export default Loader;

@@ -167,6 +167,7 @@ export class GameService {
     }
 
     const lastRound = maxBy(game.rounds, 'index');
+
     const character = lastRound.correctWord.text.charAt(0);
 
     const incorrectWordIdsToShow = shuffle(

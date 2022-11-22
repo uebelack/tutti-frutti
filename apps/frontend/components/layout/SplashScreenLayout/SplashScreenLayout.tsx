@@ -17,12 +17,12 @@ export const SplashScreenLayout = ({
   const [showLogo, setShowLogo] = useState(false);
 
   useEffect(() => {
-    document.querySelector('.app').classList.add('text-white');
+    document.querySelector('.app')?.classList?.add('text-white');
 
     setShowLogo(true);
 
     return () => {
-      document.querySelector('.app').classList.remove('text-white');
+      document.querySelector('.app')?.classList?.remove('text-white');
       setShowLogo(false);
     };
   }, []);
