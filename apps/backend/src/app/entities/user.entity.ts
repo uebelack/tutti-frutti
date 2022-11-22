@@ -10,4 +10,7 @@ export class UserEntity {
 
   @Field(() => String, { description: 'User Name' })
     name: string;
+
+  @Field(() => Number, { description: 'Top Score', nullable: true })
+    score?: number;
 }

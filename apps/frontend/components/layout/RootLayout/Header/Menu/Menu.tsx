@@ -29,7 +29,9 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 import { Button, ComingSoon, IconButton } from 'UI';
+import { useQuery } from '@apollo/client';
 import MenuButton from './MenuButton';
+import { TOP_SCORE } from '../../../../../graphql/queries/top-score';
 
 export interface MenuProps {
   closeMenu: () => void;
@@ -43,6 +45,10 @@ const MenuContent = ({ closeMenu }: MenuProps) => {
 
   const anchorRef = useRef<HTMLButtonElement>(null);
   const shareAnchorRef = useRef<HTMLButtonElement>(null);
+
+  const { data } = useQuery<{ topScore: { id: string; score: number } }>(
+    TOP_SCORE
+  );
 
   useEffect(() => {
     let timer;
@@ -96,7 +102,9 @@ const MenuContent = ({ closeMenu }: MenuProps) => {
         <div className="shrink-0 mr-4">
           <p className="text-body-lg">{user.name}</p>
           <p className="text-label-sm">Username: {user.nickname}</p>
-          {/* <p className="text-label-sm">Top Score: 300 points</p> */}
+          <p className="text-label-sm">
+            Top Score: {data?.topScore?.score ?? 0} points
+          </p>
         </div>
         <IconButton
           className="w-10 lg:w-8 ml-auto lg:ml-0 !text-current hover:!bg-blue hover:!bg-opacity-10"
