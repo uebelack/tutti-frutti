@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
+import { ControlledMenu } from '@szhsin/react-menu';
 import cn from 'classnames';
-import { CloseIcon, ExpandIcon, MenuIcon, ShrinkIcon } from 'libs/icons/src';
+import { CloseIcon, ExpandIcon, MenuIcon, ShrinkIcon } from 'icons';
 import { useEffect, useRef, useState } from 'react';
 import screenfull from 'screenfull';
 import { IconButton } from 'UI';

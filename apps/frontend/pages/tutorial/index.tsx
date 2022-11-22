@@ -28,7 +28,7 @@ const Tutorial = () => {
           Unless you are among the top 10 in the ranking, then you are allowed to use the 50:50 lifeline even twice.</p>
         <h3>How are points counted?</h3>
         <p>For every right answer you get 10 points, for every wrong answer you lose 20 points.
-          If you don't know the answer for sure, it might make more sense to skip the round with the skip button.</p>
+          If you don&apos;t know the answer for sure, it might make more sense to skip the round with the skip button.</p>
       </article>
       <Link href="/" className="text-center underline underline-offset-2">
         Go Home

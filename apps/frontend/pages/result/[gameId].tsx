@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import Confetti from 'react-confetti';
 import { Button, IconButton, Loader, Popup } from 'UI';
